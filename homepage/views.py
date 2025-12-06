@@ -1,4 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
+from .models import *
+from django.contrib import messages
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate,login
 
 
 # Create your views here.
@@ -33,13 +37,13 @@ def Add_employees(request):
     return render(request, "homepage/addemployees.html", {"form": form})
 
 
-def Delete_employees(request, Eid):
-    employees = Employees.objects.get(Eid=Eid)
-    if request.method == "POST":
+def deleteEmployees(request, Eid):
+        employees = Employees.objects.get(Eid=Eid)
         employees.delete()
+
+        messages.success(request, 'Employee has been  successfully deleted')
         return redirect("homepage:show-employees")
 
-    return render(request, "homepage/deleteemployees.html", {"employees": employees})
 
 
 def Update_employees(request, Eid):
@@ -54,8 +58,8 @@ def Update_employees(request, Eid):
 
 
 # views for crops
-from .models import Crops,Crop_expenses,Crop_sales,Crop_operations
-from .crops_form import CropsForm,Crop_expensesForm,Crop_salesForm,Crop_operationsForm
+from .models import *
+from .crops_form import *
 
 
 def Show_crops(request):
@@ -235,7 +239,7 @@ def Update_crop_operations(request,Cid,Operation_date):
 
 #views for the Machinery
 
-from .models import Machinery,Machinery_activities,Machinery_maintenance
+from .models import *
 from .machinery_form import MachineryForm,Machinery_activitesForm,Machinery_maintenanceForm
 
 def Show_machinery(request):
@@ -256,7 +260,7 @@ def Add_machinery(request):
     else:
         form = MachineryForm()
 
-        return render(request,"homepage/addmachinery.html", {"form":form})
+    return render(request,"homepage/addmachinery.html", {"form":form})
 
 
 def Delete_machinery(request,Number_plate):
@@ -406,12 +410,11 @@ def Update_livestock(request,Tag_number):
     return render(request,"homepage/updatelivestock.html",{'livestock':livestock})
 
 def Delete_livestock(request,Tag_number):
-    livestock=Livestock.objects.get(Tag_number=Tag_number)
-    if request.method=="POST":
-        livestock.delete()
-        return redirect("homepage:show-livestock")
+         livestock=Livestock.objects.get(Tag_number=Tag_number)
+         livestock.delete()
+         return redirect("homepage:show-livestock")
     
-    return render(request, "homepage/deletelivestock.html", {'livestock':livestock})
+
 
 def Show_livestock_production(request, Tag_number):
     livestock = get_object_or_404(Livestock, Tag_number=Tag_number)
@@ -528,30 +531,44 @@ def Milk_production_by_month(request, selected_year, selected_month):
     })
 
 
-def Add_milk_production_by_month(request,selected_year,selected_month):
-    if request.method=='POST':
-        form=Milk_productionForm(request.POST)
+def Add_milk_production_by_month(request, selected_year, selected_month):
+    # Convert month number to name for display
+    month_names = {
+        1: 'January', 2: 'February', 3: 'March', 4: 'April',
+        5: 'May', 6: 'June', 7: 'July', 8: 'August',
+        9: 'September', 10: 'October', 11: 'November', 12: 'December'
+    }
+
+    month_name = month_names.get(int(selected_month), '')
+
+    if request.method == 'POST':
+        form = Milk_productionForm(request.POST)
         if form.is_valid():
-            production=form.save(commit=False)
-            production.Year=selected_year
-            production.Month=selected_month
+            production = form.save(commit=False)
+            production.Year = int(selected_year)
+            production.Month = int(selected_month)  # Save as integer
             production.save()
-            return redirect('homepage:milk-productionbymonth',selected_year=selected_year,selected_month=selected_month)
-
+            return redirect('homepage:milk-productionbymonth',
+                          selected_year=selected_year,
+                          selected_month=selected_month)
     else:
-        form=Milk_productionForm()
+        form = Milk_productionForm()
 
-    return render(request,'homepage/addmilkproduction.html',{'form':form,'selected_year':selected_year,'selected_month':selected_month})
+    return render(request, 'homepage/addmilkproduction.html', {
+        'form': form,
+        'selected_year': selected_year,
+        'selected_month': selected_month,
+        'month_name': month_name  # Pass month name for display
+    })
 
 
 
 def Delete_milk_production_by_month(request,selected_year,selected_month,Day):
-    milk_production_records=get_object_or_404(Milk_production,Day=Day)
-    if request.method=='POST':
+        milk_production_records=get_object_or_404(Milk_production,Day=Day)
         milk_production_records.delete()
         return redirect('homepage:milk-productionbymonth', selected_year=selected_year,selected_month=selected_month)
     
-    return render(request, 'homepage/deletemilkproduction.html', {'milk_production_records':milk_production_records,'selected_year':selected_year,'selected_month':selected_month})
+
 
 def Update_milk_production_by_month(request,selected_year,selected_month,Day):
     milk_production_record=get_object_or_404(Milk_production,Day=Day,Year=selected_year,Month=selected_month)

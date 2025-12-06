@@ -1,72 +1,446 @@
-{%extends 'homepage/base.html' %}
-{%block content%}
+{% extends 'homepage/base.html' %}
+{% block content %}
     <head>
-        <title>add Employee</title>
-        {%load static%}  
+        <title>Add Employee</title>
+        {% load static %}
         <style>
-          body {
-            font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
-            margin: 0;
-        }
-        
-        h1{
-            text-align: center;
-            color: #333;
-        }
-        
-        form {
-            background-color: #fff;
-            border: 1px solid #ccc;
-            padding: 20px;
-            margin-top: 20px;
-            max-width: 500px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: bold;
-            color: #333;
-        }
-        
-        input[type="text"],
-        input[type="date"],
-        input[type="number"] {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-            margin-bottom: 15px;
-        }
-        
-        input[type="submit"] {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-top: 10px;
-        }
-        
-        input[type="submit"]:hover {
-            background-color: #45a049;
-        }
+            @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
+
+            :root {
+                --primary-color: #2ecc71;
+                --primary-dark: #27ae60;
+                --secondary-color: #3498db;
+                --dark-bg: #1a1a2e;
+                --card-bg: #ffffff;
+                --text-dark: #2c3e50;
+                --shadow: rgba(0, 0, 0, 0.1);
+                --shadow-hover: rgba(0, 0, 0, 0.2);
+                --input-border: #e0e0e0;
+                --error-color: #e74c3c;
+            }
+
+            body {
+                font-family: 'Poppins', sans-serif;
+                background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+                margin: 0;
+                padding: 20px 0;
+            }
+
+            /* Page Header */
+            .page-header {
+                text-align: center;
+                margin-bottom: 40px;
+                animation: fadeInDown 0.8s ease;
+            }
+
+            @keyframes fadeInDown {
+                from {
+                    opacity: 0;
+                    transform: translateY(-30px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            h1 {
+                color: var(--text-dark);
+                font-size: 36px;
+                font-weight: 700;
+                margin-bottom: 10px;
+                background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+                animation: slideIn 1s ease;
+            }
+
+            @keyframes slideIn {
+                from {
+                    opacity: 0;
+                    transform: translateX(-50px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+            }
+
+            .page-subtitle {
+                color: #7f8c8d;
+                font-size: 16px;
+                font-weight: 400;
+            }
+
+            /* Form Container */
+            form {
+                background: var(--card-bg);
+                border: none;
+                padding: 40px;
+                margin: 20px auto;
+                max-width: 600px;
+                border-radius: 20px;
+                box-shadow: 0 10px 40px var(--shadow);
+                position: relative;
+                overflow: hidden;
+                animation: formSlideUp 0.8s ease;
+            }
+
+            @keyframes formSlideUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(50px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            /* Decorative elements */
+            form::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 5px;
+                background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+                animation: shimmer 3s infinite;
+            }
+
+            @keyframes shimmer {
+                0%, 100% {
+                    opacity: 1;
+                }
+                50% {
+                    opacity: 0.5;
+                }
+            }
+
+            form::after {
+                content: '';
+                position: absolute;
+                top: -50%;
+                right: -50%;
+                width: 200%;
+                height: 200%;
+                background: radial-gradient(circle, rgba(46, 204, 113, 0.05) 0%, transparent 70%);
+                animation: rotate 20s linear infinite;
+                pointer-events: none;
+            }
+
+            @keyframes rotate {
+                from { transform: rotate(0deg); }
+                to { transform: rotate(360deg); }
+            }
+
+            /* Form Title */
+            form h1 {
+                text-align: center;
+                margin-bottom: 30px;
+                position: relative;
+                z-index: 1;
+            }
+
+            /* Label Styles */
+            label {
+                display: block;
+                margin-bottom: 8px;
+                font-weight: 600;
+                color: var(--text-dark);
+                font-size: 14px;
+                position: relative;
+                z-index: 1;
+                transition: color 0.3s ease;
+            }
+
+            /* Input Field Styles */
+            input[type="text"],
+            input[type="date"],
+            input[type="number"],
+            input[type="email"],
+            input[type="tel"],
+            select,
+            textarea {
+                width: 100%;
+                padding: 14px 18px;
+                border: 2px solid var(--input-border);
+                border-radius: 12px;
+                box-sizing: border-box;
+                margin-bottom: 20px;
+                font-size: 15px;
+                font-family: 'Poppins', sans-serif;
+                transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+                background: #fafafa;
+                color: var(--text-dark);
+                position: relative;
+                z-index: 1;
+            }
+
+            input[type="text"]:focus,
+            input[type="date"]:focus,
+            input[type="number"]:focus,
+            input[type="email"]:focus,
+            input[type="tel"]:focus,
+            select:focus,
+            textarea:focus {
+                outline: none;
+                border-color: var(--primary-color);
+                background: #fff;
+                box-shadow: 0 5px 15px rgba(46, 204, 113, 0.2);
+                transform: translateY(-2px);
+            }
+
+            input[type="text"]:hover,
+            input[type="date"]:hover,
+            input[type="number"]:hover,
+            input[type="email"]:hover,
+            input[type="tel"]:hover,
+            select:hover,
+            textarea:hover {
+                border-color: var(--primary-color);
+                background: #fff;
+            }
+
+            /* Paragraph wrapper for form fields */
+            form p {
+                margin-bottom: 20px;
+                animation: fadeIn 0.6s ease forwards;
+                opacity: 0;
+                position: relative;
+                z-index: 1;
+            }
+
+            form p:nth-child(1) { animation-delay: 0.1s; }
+            form p:nth-child(2) { animation-delay: 0.2s; }
+            form p:nth-child(3) { animation-delay: 0.3s; }
+            form p:nth-child(4) { animation-delay: 0.4s; }
+            form p:nth-child(5) { animation-delay: 0.5s; }
+            form p:nth-child(6) { animation-delay: 0.6s; }
+            form p:nth-child(7) { animation-delay: 0.7s; }
+            form p:nth-child(8) { animation-delay: 0.8s; }
+
+            @keyframes fadeIn {
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+                from {
+                    transform: translateY(10px);
+                }
+            }
+
+            /* Submit Button */
+            input[type="submit"] {
+                width: 100%;
+                background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+                color: white;
+                padding: 16px 20px;
+                border: none;
+                border-radius: 12px;
+                cursor: pointer;
+                font-size: 18px;
+                font-weight: 600;
+                margin-top: 10px;
+                transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+                box-shadow: 0 5px 20px rgba(46, 204, 113, 0.3);
+                position: relative;
+                overflow: hidden;
+                z-index: 1;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+            }
+
+            input[type="submit"]::before {
+                content: '';
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 0;
+                height: 0;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.3);
+                transform: translate(-50%, -50%);
+                transition: width 0.6s, height 0.6s;
+            }
+
+            input[type="submit"]:hover::before {
+                width: 400px;
+                height: 400px;
+            }
+
+            input[type="submit"]:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 8px 25px rgba(46, 204, 113, 0.5);
+            }
+
+            input[type="submit"]:active {
+                transform: translateY(-1px);
+                box-shadow: 0 5px 15px rgba(46, 204, 113, 0.4);
+            }
+
+            /* Helper Text */
+            .helptext {
+                font-size: 12px;
+                color: #95a5a6;
+                margin-top: 5px;
+                display: block;
+            }
+
+            /* Error Messages */
+            .errorlist {
+                list-style: none;
+                padding: 0;
+                margin: 5px 0 10px;
+            }
+
+            .errorlist li {
+                color: var(--error-color);
+                font-size: 13px;
+                padding: 8px 12px;
+                background: rgba(231, 76, 60, 0.1);
+                border-radius: 6px;
+                margin-bottom: 5px;
+                animation: shake 0.5s ease;
+            }
+
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                25% { transform: translateX(-10px); }
+                75% { transform: translateX(10px); }
+            }
+
+            /* Success Message */
+            .success-message {
+                background: rgba(46, 204, 113, 0.1);
+                color: var(--primary-dark);
+                padding: 15px;
+                border-radius: 12px;
+                margin-bottom: 20px;
+                border-left: 4px solid var(--primary-color);
+                animation: slideInLeft 0.5s ease;
+            }
+
+            @keyframes slideInLeft {
+                from {
+                    opacity: 0;
+                    transform: translateX(-30px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+            }
+
+            /* Responsive Design */
+            @media (max-width: 768px) {
+                form {
+                    padding: 30px 25px;
+                    margin: 15px;
+                }
+
+                h1 {
+                    font-size: 28px;
+                }
+
+                input[type="text"],
+                input[type="date"],
+                input[type="number"],
+                input[type="email"],
+                input[type="tel"],
+                select,
+                textarea {
+                    padding: 12px 15px;
+                }
+
+                input[type="submit"] {
+                    padding: 14px 18px;
+                    font-size: 16px;
+                }
+            }
+
+            @media (max-width: 480px) {
+                form {
+                    padding: 25px 20px;
+                }
+
+                h1 {
+                    font-size: 24px;
+                }
+
+                .page-subtitle {
+                    font-size: 14px;
+                }
+            }
+
+            /* Loading State */
+            .loading {
+                pointer-events: none;
+                opacity: 0.6;
+            }
+
+            .loading input[type="submit"]::after {
+                content: '';
+                position: absolute;
+                width: 20px;
+                height: 20px;
+                top: 50%;
+                left: 50%;
+                margin-left: -10px;
+                margin-top: -10px;
+                border: 3px solid #ffffff;
+                border-radius: 50%;
+                border-top-color: transparent;
+                animation: spin 0.8s linear infinite;
+            }
+
+            @keyframes spin {
+                to { transform: rotate(360deg); }
+            }
         </style>
     </head>
-    
+
     <body>
-        
-        <form method="POST" action={%url 'homepage:add-employees'%}>
-            <h1>Add Employee</h1>
-            {%csrf_token%}
-            {{form.as_p}}
-            <input type="submit" value="add">
+        <div class="page-header">
+            <h1>Add New Employee</h1>
+            <p class="page-subtitle">Enter employee details to add them to your farm team</p>
+        </div>
+
+        <form method="POST" action="{% url 'homepage:add-employees' %}" id="employeeForm">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Add Employee">
         </form>
+
+        <script>
+            // Form submission animation
+            document.getElementById('employeeForm').addEventListener('submit', function(e) {
+                const submitBtn = this.querySelector('input[type="submit"]');
+                submitBtn.value = 'Adding...';
+                this.classList.add('loading');
+            });
+
+            // Add focus animation to inputs
+            const inputs = document.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.parentElement.querySelector('label')?.style.setProperty('color', 'var(--primary-color)');
+                });
+
+                input.addEventListener('blur', function() {
+                    this.parentElement.querySelector('label')?.style.setProperty('color', 'var(--text-dark)');
+                });
+            });
+
+            // Smooth scroll to error if exists
+            window.addEventListener('load', function() {
+                const errorList = document.querySelector('.errorlist');
+                if (errorList) {
+                    errorList.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            });
+        </script>
     </body>
-    {%endblock%}
+{% endblock %}

@@ -1,17 +1,10 @@
 from django import forms
-from .models import Machinery,Machinery_activities,Machinery_maintenance
+from .models import *
 
 class MachineryForm(forms.ModelForm):
     class Meta:
         model=Machinery
-        fields=[
-            'Number_plate',
-            'Equipment_name',
-            'Purchase_price',
-            'Purchase_date',
-            'Operation',
-            
-        ]
+        fields= '__all__'
 
 class Machinery_activitesForm(forms.ModelForm):
     class Meta:

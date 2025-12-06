@@ -8,9 +8,7 @@ class EmployeesForm(forms.ModelForm):
         fields = [
             "Eid",
             "Name",
-            "Country_code",
             "Phone_number",
             "Position",
             "Salary",
-            "Performance",
         ]

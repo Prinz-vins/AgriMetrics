@@ -1,74 +1,425 @@
 {% extends 'homepage/base.html' %}
 
 {% block content %}
-    <head>
-        <title>add Crop sales</title>
-        {%load static%}  
-        <style>
+<head>
+    <title>Add Crop Sales</title>
+    {% load static %}
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: "Poppins", Arial, sans-serif;
+            background: linear-gradient(135deg, #e8f3e4 0%, #f6faf4 100%);
+            margin: 0;
+            padding: 30px 20px;
+            animation: fadeIn 0.6s ease;
+            min-height: 100vh;
+        }
 
-            body {
-                font-family: Arial, sans-serif;
-                background-color: #f2f2f2;
-                margin: 0;
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            animation: slideUp 0.7s ease;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .form-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #4c8c2b 0%, #66bb6a 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 36px;
+            margin: 0 auto 20px;
+            box-shadow: 0 8px 20px rgba(76, 140, 43, 0.3);
+        }
+
+        h1 {
+            color: #2f5d2f;
+            font-weight: 600;
+            margin: 0;
+            font-size: 2em;
+        }
+
+        .form-subtitle {
+            color: #666;
+            font-size: 14px;
+            margin-top: 8px;
+        }
+
+        form {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        form p {
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        label i {
+            color: #4c8c2b;
+            font-size: 16px;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="number"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            box-sizing: border-box;
+            font-size: 14px;
+            font-family: "Poppins", Arial, sans-serif;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        input[type="text"]:focus,
+        input[type="date"]:focus,
+        input[type="number"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #4c8c2b;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(76, 140, 43, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .helptext {
+            display: block;
+            font-size: 12px;
+            color: #888;
+            margin-top: 6px;
+            font-style: italic;
+        }
+
+        .errorlist {
+            list-style: none;
+            padding: 0;
+            margin: 8px 0 0 0;
+        }
+
+        .errorlist li {
+            color: #d32f2f;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 4px;
+        }
+
+        .errorlist li::before {
+            content: "⚠";
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        input[type="submit"],
+        .btn {
+            flex: 1;
+            padding: 14px 28px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            font-family: "Poppins", Arial, sans-serif;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        input[type="submit"] {
+            background: linear-gradient(135deg, #4c8c2b 0%, #66bb6a 100%);
+            color: white;
+            box-shadow: 0 4px 14px rgba(76, 140, 43, 0.3);
+        }
+
+        input[type="submit"]:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(76, 140, 43, 0.4);
+        }
+
+        input[type="submit"]:active {
+            transform: translateY(0);
+        }
+
+        .btn-cancel {
+            background: #f5f5f5;
+            color: #666;
+            border: 2px solid #ddd;
+        }
+
+        .btn-cancel:hover {
+            background: #e8e8e8;
+            transform: translateY(-2px);
+        }
+
+        /* Field wrapper for icons */
+        .field-wrapper {
+            position: relative;
+        }
+
+        .field-icon {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #4c8c2b;
+            font-size: 18px;
+            pointer-events: none;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="number"],
+        select {
+            padding-right: 45px;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
             }
-            
-            h1 {
-                text-align: center;
-                color: #333;
+            to {
+                opacity: 1;
             }
-            
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
             form {
-                background-color: #fff;
-                border: 1px solid #ccc;
-                padding: 20px;
-                margin-top: 20px;
-                max-width: 500px;
-                margin-left: auto;
-                margin-right: auto;
+                padding: 28px 20px;
             }
-            
-            label {
-                display: block;
-                margin-bottom: 10px;
-                font-weight: bold;
-                color: #333;
+
+            h1 {
+                font-size: 1.6em;
             }
-            
-            input[type="text"],
-            input[type="date"],
-            input[type="number"] {
-                width: 100%;
-                padding: 8px;
-                border: 1px solid #ccc;
-                border-radius: 4px;
-                box-sizing: border-box;
-                margin-bottom: 15px;
+
+            .form-actions {
+                flex-direction: column;
             }
-            
-            input[type="submit"] {
-                background-color: #4CAF50;
-                color: white;
-                padding: 10px 20px;
-                border: none;
-                border-radius: 4px;
-                cursor: pointer;
-                font-size: 16px;
-                margin-top: 10px;
+
+            .form-icon {
+                width: 70px;
+                height: 70px;
+                font-size: 32px;
             }
-            
-            input[type="submit"]:hover {
-                background-color: #45a049;
+        }
+
+        /* Django form styling enhancement */
+        form > p > label {
+            text-transform: capitalize;
+        }
+
+        /* Required field indicator */
+        .required::after {
+            content: " *";
+            color: #d32f2f;
+        }
+
+        /* Calculation preview */
+        .calculation-preview {
+            background: linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 100%);
+            padding: 16px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #4c8c2b;
+            display: none;
+        }
+
+        .calculation-preview.active {
+            display: block;
+            animation: slideDown 0.4s ease;
+        }
+
+        .preview-label {
+            font-size: 12px;
+            color: #666;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .preview-value {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #2f5d2f;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
             }
-        </style>
-    </head>
-    
-    <body>
-        
-        <form method="POST" action="">
-            <h1>Add Crop Sales</h1>
-            {%csrf_token%}
-            {{form.as_p}}
-            <input type="submit" value="add">
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="form-container">
+        <div class="form-header">
+            <div class="form-icon">
+                <i class='bx bx-cart'></i>
+            </div>
+            <h1>Add Crop Sale</h1>
+            <p class="form-subtitle">Record a new sale transaction</p>
+        </div>
+
+        <form method="POST" action="" id="salesForm">
+            {% csrf_token %}
+
+            <div class="calculation-preview" id="totalPreview">
+                <div class="preview-label">Estimated Total Price</div>
+                <div class="preview-value" id="calculatedTotal">KSh 0.00</div>
+            </div>
+
+            {{ form.as_p }}
+
+            <div class="form-actions">
+                <a href="javascript:history.back()" class="btn btn-cancel">
+                    <i class='bx bx-x'></i> Cancel
+                </a>
+                <input type="submit" value="Add Sale">
+            </div>
         </form>
-    </body>
-    {%endblock%}
+    </div>
+
+    <script>
+        // Add icons to form fields dynamically
+        document.addEventListener('DOMContentLoaded', function() {
+            const labels = document.querySelectorAll('form p label');
+
+            labels.forEach(label => {
+                const labelText = label.textContent.toLowerCase();
+                let icon = 'bx-pencil';
+
+                // Assign icons based on field name
+                if (labelText.includes('date')) {
+                    icon = 'bx-calendar';
+                } else if (labelText.includes('quantity')) {
+                    icon = 'bx-package';
+                } else if (labelText.includes('price') || labelText.includes('amount')) {
+                    icon = 'bx-money';
+                } else if (labelText.includes('buyer')) {
+                    icon = 'bx-user';
+                } else if (labelText.includes('payment method')) {
+                    icon = 'bx-credit-card';
+                } else if (labelText.includes('payment status')) {
+                    icon = 'bx-check-circle';
+                } else if (labelText.includes('invoice')) {
+                    icon = 'bx-file';
+                } else if (labelText.includes('note') || labelText.includes('additional')) {
+                    icon = 'bx-note';
+                }
+
+                // Create icon element
+                const iconElement = document.createElement('i');
+                iconElement.className = `bx ${icon}`;
+                label.insertBefore(iconElement, label.firstChild);
+            });
+
+            // Mark required fields
+            document.querySelectorAll('input[required], select[required], textarea[required]').forEach(field => {
+                const label = field.parentElement.querySelector('label');
+                if (label && !label.classList.contains('required')) {
+                    label.classList.add('required');
+                }
+            });
+
+            // Auto-calculate total price
+            const quantityInput = document.querySelector('input[name*="quantity" i], input[name*="Quantity" i]');
+            const unitPriceInput = document.querySelector('input[name*="unit_price" i], input[name*="Unit_price" i]');
+            const totalPriceInput = document.querySelector('input[name*="total_price" i], input[name*="Total_price" i]');
+            const preview = document.getElementById('totalPreview');
+            const calculatedTotal = document.getElementById('calculatedTotal');
+
+            if (quantityInput && unitPriceInput) {
+                function calculateTotal() {
+                    const quantity = parseFloat(quantityInput.value) || 0;
+                    const unitPrice = parseFloat(unitPriceInput.value) || 0;
+                    const total = quantity * unitPrice;
+
+                    if (quantity > 0 && unitPrice > 0) {
+                        calculatedTotal.textContent = 'KSh ' + total.toFixed(2);
+                        preview.classList.add('active');
+
+                        // Auto-fill total price if field exists
+                        if (totalPriceInput) {
+                            totalPriceInput.value = total.toFixed(2);
+                        }
+                    } else {
+                        preview.classList.remove('active');
+                    }
+                }
+
+                quantityInput.addEventListener('input', calculateTotal);
+                unitPriceInput.addEventListener('input', calculateTotal);
+            }
+        });
+
+        // Auto-format currency inputs
+        document.querySelectorAll('input[type="number"]').forEach(input => {
+            if (input.name.toLowerCase().includes('price') || input.name.toLowerCase().includes('amount')) {
+                input.addEventListener('blur', function() {
+                    if (this.value && !this.name.toLowerCase().includes('quantity')) {
+                        this.value = parseFloat(this.value).toFixed(2);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+{% endblock %}

@@ -2,73 +2,364 @@
 
 {% block content %}
     <head>
-        <title>add Crop operation</title>
-        {%load static%}  
+        <title>Add Crop Operation</title>
+        {% load static %}
         <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
 
             body {
-                font-family: Arial, sans-serif;
-                background-color: #f2f2f2;
-                margin: 0;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background: linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 50%, #fff9c4 100%);
+                min-height: 100vh;
+                padding: 40px 20px;
+                position: relative;
             }
-            
+
+            /* Decorative background elements */
+            body::before {
+                content: '';
+                position: fixed;
+                top: -50%;
+                right: -50%;
+                width: 100%;
+                height: 100%;
+                background: radial-gradient(circle, rgba(76, 175, 80, 0.08) 0%, transparent 70%);
+                animation: floatBackground 20s ease-in-out infinite;
+                pointer-events: none;
+            }
+
+            @keyframes floatBackground {
+                0%, 100% { transform: translate(0, 0) rotate(0deg); }
+                50% { transform: translate(-30px, 30px) rotate(5deg); }
+            }
+
+            .form-container {
+                background: #ffffff;
+                border: none;
+                border-radius: 24px;
+                padding: 45px 40px;
+                margin: 0 auto;
+                max-width: 600px;
+                box-shadow:
+                    0 20px 60px rgba(0, 0, 0, 0.12),
+                    0 0 0 1px rgba(76, 175, 80, 0.1);
+                position: relative;
+                animation: slideUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+                overflow: hidden;
+            }
+
+            @keyframes slideUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(40px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            /* Decorative top accent */
+            .form-container::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 6px;
+                background: linear-gradient(90deg, #4caf50 0%, #66bb6a 50%, #81c784 100%);
+                box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+            }
+
+            /* Icon decoration */
+            .form-container::after {
+                content: '🌾';
+                position: absolute;
+                top: 20px;
+                right: 30px;
+                font-size: 48px;
+                opacity: 0.1;
+                animation: gentleFloat 4s ease-in-out infinite;
+            }
+
+            @keyframes gentleFloat {
+                0%, 100% { transform: translateY(0px); }
+                50% { transform: translateY(-10px); }
+            }
+
             h1 {
                 text-align: center;
-                color: #333;
+                color: #2d5a2d;
+                font-size: 32px;
+                font-weight: 700;
+                margin-bottom: 35px;
+                background: linear-gradient(135deg, #2d5a2d 0%, #4caf50 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+                letter-spacing: 0.5px;
+                position: relative;
+                padding-bottom: 15px;
             }
-            
+
+            h1::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 80px;
+                height: 4px;
+                background: linear-gradient(90deg, transparent, #4caf50, transparent);
+                border-radius: 2px;
+            }
+
             form {
-                background-color: #fff;
-                border: 1px solid #ccc;
-                padding: 20px;
-                margin-top: 20px;
-                max-width: 500px;
-                margin-left: auto;
-                margin-right: auto;
+                position: relative;
+                z-index: 1;
             }
-            
+
+            /* Style for Django form fields */
+            form p {
+                margin-bottom: 28px;
+                position: relative;
+            }
+
             label {
                 display: block;
                 margin-bottom: 10px;
-                font-weight: bold;
-                color: #333;
+                font-weight: 600;
+                font-size: 15px;
+                color: #2d5a2d;
+                letter-spacing: 0.3px;
+                transition: color 0.3s ease;
             }
-            
+
+            /* Input wrapper for animation */
+            form p {
+                position: relative;
+            }
+
+            form p::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 0;
+                height: 3px;
+                background: linear-gradient(90deg, #4caf50, #66bb6a, #4caf50);
+                transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+                border-radius: 3px 3px 0 0;
+            }
+
+            form p:focus-within::after {
+                width: 100%;
+            }
+
+            form p:focus-within label {
+                color: #4caf50;
+            }
+
             input[type="text"],
             input[type="date"],
-            input[type="number"] {
+            input[type="number"],
+            select,
+            textarea {
                 width: 100%;
-                padding: 8px;
-                border: 1px solid #ccc;
-                border-radius: 4px;
-                box-sizing: border-box;
-                margin-bottom: 15px;
+                padding: 14px 18px;
+                border: 2px solid #d5e3d5;
+                border-radius: 12px;
+                font-size: 15px;
+                font-family: inherit;
+                transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+                background: linear-gradient(to bottom, #fafafa, #ffffff);
+                color: #2d5a2d;
             }
-            
-            input[type="submit"] {
-                background-color: #4CAF50;
-                color: white;
-                padding: 10px 20px;
-                border: none;
-                border-radius: 4px;
+
+            input[type="text"]:focus,
+            input[type="date"]:focus,
+            input[type="number"]:focus,
+            select:focus,
+            textarea:focus {
+                border-color: #4caf50;
+                background: #ffffff;
+                outline: none;
+                box-shadow:
+                    0 0 0 5px rgba(76, 175, 80, 0.08),
+                    0 4px 12px rgba(76, 175, 80, 0.15);
+                transform: translateY(-2px);
+            }
+
+            input::placeholder,
+            textarea::placeholder {
+                color: #a5b5a5;
+                font-weight: 400;
+            }
+
+            /* Style for select dropdowns */
+            select {
                 cursor: pointer;
-                font-size: 16px;
-                margin-top: 10px;
+                appearance: none;
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%234caf50' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+                background-repeat: no-repeat;
+                background-position: right 18px center;
+                padding-right: 45px;
             }
-            
+
+            /* Textarea styling */
+            textarea {
+                min-height: 100px;
+                resize: vertical;
+            }
+
+            /* Submit button */
+            input[type="submit"] {
+                width: 100%;
+                background: linear-gradient(135deg, #4caf50 0%, #5cb860 50%, #66bb6a 100%);
+                color: white;
+                padding: 17px 20px;
+                border: none;
+                border-radius: 14px;
+                cursor: pointer;
+                font-size: 17px;
+                font-weight: 700;
+                letter-spacing: 1px;
+                text-transform: uppercase;
+                margin-top: 20px;
+                transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+                box-shadow:
+                    0 6px 20px rgba(76, 175, 80, 0.35),
+                    0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+                position: relative;
+                overflow: hidden;
+            }
+
+            /* Ripple effect on button */
+            input[type="submit"]::before {
+                content: '';
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 0;
+                height: 0;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.25);
+                transform: translate(-50%, -50%);
+                transition: width 0.7s ease, height 0.7s ease;
+            }
+
             input[type="submit"]:hover {
-                background-color: #45a049;
+                transform: translateY(-3px);
+                box-shadow:
+                    0 10px 30px rgba(76, 175, 80, 0.45),
+                    0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+                background: linear-gradient(135deg, #3c9f40 0%, #4caf50 50%, #5cb860 100%);
+            }
+
+            input[type="submit"]:hover::before {
+                width: 400px;
+                height: 400px;
+            }
+
+            input[type="submit"]:active {
+                transform: translateY(-1px);
+                box-shadow:
+                    0 4px 15px rgba(76, 175, 80, 0.4),
+                    0 0 0 1px rgba(255, 255, 255, 0.15) inset;
+            }
+
+            /* Help text styling */
+            .helptext {
+                display: block;
+                font-size: 13px;
+                color: #6b7b6b;
+                margin-top: 6px;
+                font-style: italic;
+            }
+
+            /* Error message styling */
+            .errorlist {
+                list-style: none;
+                padding: 10px 14px;
+                background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+                color: #c62828;
+                border-left: 4px solid #d32f2f;
+                border-radius: 8px;
+                margin-bottom: 12px;
+                font-size: 14px;
+                animation: errorShake 0.5s ease;
+            }
+
+            @keyframes errorShake {
+                0%, 100% { transform: translateX(0); }
+                25% { transform: translateX(-8px); }
+                75% { transform: translateX(8px); }
+            }
+
+            /* Required field indicator */
+            .required label::after {
+                content: ' *';
+                color: #f44336;
+                font-weight: bold;
+            }
+
+            /* Responsive design */
+            @media (max-width: 640px) {
+                .form-container {
+                    padding: 35px 25px;
+                    margin: 0 15px;
+                }
+
+                h1 {
+                    font-size: 28px;
+                    margin-bottom: 30px;
+                }
+
+                input[type="text"],
+                input[type="date"],
+                input[type="number"],
+                select,
+                textarea {
+                    padding: 12px 16px;
+                    font-size: 14px;
+                }
+
+                input[type="submit"] {
+                    padding: 15px;
+                    font-size: 16px;
+                }
+
+                .form-container::after {
+                    font-size: 36px;
+                    right: 20px;
+                }
+            }
+
+            @media (max-width: 400px) {
+                .form-container {
+                    padding: 30px 20px;
+                }
+
+                h1 {
+                    font-size: 24px;
+                }
             }
         </style>
     </head>
-    
+
     <body>
-        
-        <form method="POST" action="">
-            <h1>Add Crop Operations</h1>
-            {%csrf_token%}
-            {{form.as_p}}
-            <input type="submit" value="add">
-        </form>
+        <div class="form-container">
+            <form method="POST" action="">
+                <h1>Add Crop Operations</h1>
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input type="submit" value="Add Operation">
+            </form>
+        </div>
     </body>
-    {%endblock%}
+{% endblock %}

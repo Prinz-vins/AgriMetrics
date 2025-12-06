@@ -1,62 +1,5 @@
 from django.urls import path
-from .views import (
-    Mainpage,
-    Show_employees,
-    Add_employees,
-    Delete_employees,
-    Update_employees,
-    Show_crops,
-    Add_crops,
-    Update_crops,
-    Delete_crops,
-    Show_machinery,
-    Add_machinery,
-    Delete_machinery,
-    Update_machinery,
-    Show_livestock,
-    Add_livestock,
-    Update_livestock,
-    Delete_livestock,
-    Show_livestock_production,
-    Add_livestock_production,
-    Delete_livestock_production,
-    Update_livestock_production,
-    Show_crop_expenses,
-    Add_crop_expenses,
-    Update_crop_expenses,
-    Delete_crop_expenses,
-    Show_crop_sales,
-    Add_crop_sales,
-    Delete_crop_sales,
-    Update_crop_sales,
-    Show_crop_operations,
-    Add_crop_operations,
-    Delete_crop_operations,
-    Update_crop_operations,
-    Show_machinery_activities,
-    Add_machinery_activities,
-    Delete_machinery_activity,
-    Update_machinery_activities,
-    Show_machinery_maintenance,
-    Add_machinery_maintenance,
-    Delete_machinery_maintenance,
-    Update_machinery_maintenance,
-
-    Select_year_month,
-    Milk_production_by_month,
-    Add_milk_production_by_month,
-    Delete_milk_production_by_month,
-    Update_milk_production_by_month,
-
-    Select_year_month_egg,
-    Egg_production_record,
-    Add_egg_production_by_month,
-    Delete_egg_production_by_month,
-    Update_egg_production_by_month,
-
-    Help
-    
-)
+from .views import *
 
 app_name = "homepage"
 
@@ -67,7 +10,7 @@ urlpatterns = [
 
     path("add_employees/", Add_employees, name="add-employees"),
 
-    path("delete_employees/<int:Eid>/", Delete_employees, name="delete-employees"),
+    path("deleteEmployees/<int:Eid>/", deleteEmployees),
 
     path("update_employees/<int:Eid>/", Update_employees, name="update-employees"),
 
@@ -93,7 +36,7 @@ urlpatterns = [
 
     path("update_livestock/<str:Tag_number>/", Update_livestock, name="update-livestock" ),
 
-    path("delete_livestock/<str:Tag_number>/", Delete_livestock, name="delete-livestock"),
+    path("delete_livestock/<int:Tag_number>/", Delete_livestock),
 
     path('show_livestockproduction/<str:Tag_number>/', Show_livestock_production, name='show-livestockproduction'),
 

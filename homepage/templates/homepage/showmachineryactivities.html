@@ -1,100 +1,429 @@
 {%extends 'homepage/base.html' %} {% block content %}
 <head>
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
+      font-family: "Poppins", Arial, sans-serif;
+      background: linear-gradient(135deg, #e8f3e4 0%, #f6faf4 100%);
       margin: 0;
-      padding: 0;
+      padding: 30px 20px;
+      animation: fadeIn .6s ease;
     }
 
     h1 {
-      color: #333;
       text-align: center;
+      color: #2f5d2f;
+      font-weight: 600;
+      margin-top: 5px;
+      margin-bottom: 30px;
+      font-size: 2em;
+      animation: slideDown .7s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    h1 i {
+      font-size: 1.1em;
+      color: #4c8c2b;
+    }
+
+    .table-wrapper {
+      max-width: 1200px;
+      margin: auto;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
+      background: white;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 4px 25px rgba(0,0,0,.09);
+      animation: fadeInUp .7s ease;
       margin-top: 20px;
     }
 
-    th,
-    td {
-      border: 1px solid #ddd;
-      padding: 10px;
+    th {
+      background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%);
+      color: white;
+      padding: 16px 14px;
+      font-size: 15px;
       text-align: left;
+      font-weight: 600;
     }
 
-    th {
-      background-color: #4caf50;
-      color: white;
+    td {
+      padding: 14px;
+      font-size: 14px;
+      color: #333;
+      border-bottom: 1px solid #eee;
+      transition: background .2s ease;
     }
 
     tr:nth-child(even) {
-      background-color: #f2f2f2;
+      background-color: #f9fdf9;
+    }
+
+    tbody tr:hover td {
+      background: #f1f9ee;
     }
 
     .update-link,
     .delete-link {
-      display: inline-block;
-      padding: 5px 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 7px 12px;
       text-decoration: none;
       color: #fff;
-      border-radius: 3px;
-      margin-right: 5px;
+      border-radius: 6px;
+      margin: 3px 2px;
+      font-size: 13px;
+      font-weight: 500;
+      transition: transform .2s ease, opacity .2s ease;
+      cursor: pointer;
+      white-space: nowrap;
     }
 
     .update-link {
-      background-color: #3498db;
+      background: #2f80ed;
+    }
+
+    .update-link:hover {
+      transform: translateY(-2px);
+      opacity: .9;
     }
 
     .delete-link {
-      background-color: #e74c3c;
+      background: #d64545;
+    }
+
+    .delete-link:hover {
+      transform: translateY(-2px);
+      opacity: .9;
+    }
+
+    .add-container {
+      text-align: center;
+      margin-top: 30px;
+      animation: fadeInUp .8s ease;
     }
 
     .add-button {
-      display: inline-block;
-      padding: 10px;
-      background-color: #4caf50;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, #4c8c2b 0%, #66bb6a 100%);
       color: white;
+      padding: 12px 28px;
       text-decoration: none;
-      border-radius: 3px;
-      margin-top: 20px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      box-shadow: 0 4px 14px rgba(0,0,0,.12);
+      transition: transform .25s ease, background .25s ease;
+    }
+
+    .add-button:hover {
+      transform: translateY(-4px);
+      background: linear-gradient(135deg, #3a6f23 0%, #4c8c2b 100%);
+    }
+
+    /* Modal Styles */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 1000;
+      animation: modalFadeIn .3s ease;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal {
+      background: white;
+      border-radius: 12px;
+      padding: 28px;
+      max-width: 400px;
+      width: 90%;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+      animation: modalSlideIn .3s ease;
+      position: relative;
+    }
+
+    .modal-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .modal-icon {
+      width: 64px;
+      height: 64px;
+      background: #fee;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #d64545;
+      font-size: 32px;
+      margin: 0 auto 12px;
+    }
+
+    .modal-title {
+      font-size: 1.4em;
+      font-weight: 600;
+      color: #333;
+      margin: 0;
+    }
+
+    .modal-body {
+      margin-bottom: 24px;
+      color: #666;
+      line-height: 1.6;
+      font-size: 0.95em;
+      text-align: center;
+    }
+
+    .modal-activity-info {
+      background: #f8f9fa;
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin: 16px 0;
+      font-weight: 600;
+      color: #2f5d2f;
+      font-size: 1.1em;
+      text-align: center;
+    }
+
+    .modal-warning {
+      margin-top: 12px;
+      color: #999;
+      font-weight: 400;
+      font-size: 0.9em;
+      text-align: center;
+    }
+
+    .modal-buttons {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .modal-button {
+      padding: 11px 32px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.95em;
+      cursor: pointer;
+      transition: all .3s ease;
+      font-family: "Poppins", Arial, sans-serif;
+    }
+
+    .modal-cancel {
+      background: #f5f5f5;
+      color: #666;
+      border: 1px solid #ddd;
+    }
+
+    .modal-cancel:hover {
+      background: #e8e8e8;
+      transform: translateY(-1px);
+    }
+
+    .modal-confirm {
+      background: #d64545;
+      color: white;
+    }
+
+    .modal-confirm:hover {
+      background: #c23838;
+      transform: translateY(-1px);
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-14px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: .3; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes modalFadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes modalSlideIn {
+      from {
+        transform: scale(0.8) translateY(-30px);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 1.6em;
+      }
+
+      table {
+        font-size: 12px;
+      }
+
+      th, td {
+        padding: 12px 10px;
+      }
+
+      .update-link,
+      .delete-link {
+        padding: 6px 10px;
+        font-size: 12px;
+        display: block;
+        margin: 5px 0;
+      }
+
+      .modal {
+        padding: 24px;
+      }
+
+      .modal-buttons {
+        flex-direction: column;
+      }
+
+      .modal-button {
+        width: 100%;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>Machinery Activities Details</h1>
-  <table>
-    <thead>
-      <tr>
-        <th>Activity Date</th>
-        <th>Activity Type</th>
-        <th>Activity Cost</th>
-        <th>Description</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for activity in activities %}
-      <tr>
-        <td>{{ activity.Activity_date }}</td>
-        <td>{{ activity.Activity_type }}</td>
-        <td>{{ activity.Activity_cost}}</td>
-        <td>{{ activity.Description }}</td>
+  <div class="table-wrapper">
+    <h1>
+      <i class='bx bx-cog'></i>
+      Machinery Activities Details
+    </h1>
 
-        <td>
-          <a href="{%url 'homepage:update-machineryactivities' Number_plate=machinery.Number_plate Activity_date=activity.Activity_date|date:'Y-m-d' %}"class="update-link">Update</a>
-          <a href="{%url 'homepage:delete-machineryactivities' Number_plate=machinery.Number_plate Activity_date=activity.Activity_date|date:'Y-m-d' %}"class="delete-link">Delete</a >
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+    <table>
+      <thead>
+        <tr>
+          <th><i class='bx bx-calendar'></i> Activity Date</th>
+          <th><i class='bx bx-wrench'></i> Activity Type</th>
+          <th><i class='bx bx-money'></i> Activity Cost (KSh)</th>
+          <th><i class='bx bx-comment-detail'></i> Description</th>
+          <th><i class='bx bx-cog'></i> Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for activity in activities %}
+        <tr>
+          <td>{{ activity.Activity_date }}</td>
+          <td><strong>{{ activity.Activity_type }}</strong></td>
+          <td>{{ activity.Activity_cost}}</td>
+          <td>{{ activity.Description }}</td>
+          <td>
+            <a href="{%url 'homepage:update-machineryactivities' Number_plate=machinery.Number_plate Activity_date=activity.Activity_date|date:'Y-m-d' %}" class="update-link">
+              <i class='bx bx-edit-alt'></i> Update
+            </a>
+            <a href="#" class="delete-link" onclick="showDeleteModal(event, '{{ activity.Activity_date }}', '{{ activity.Activity_type }}')">
+              <i class='bx bx-trash'></i> Delete
+            </a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
 
-  <a
-    href="{% url 'homepage:add-machineryactivities' Number_plate=machinery.Number_plate %}"
-    class="add-button">Add an Activity</a>
+    <div class="add-container">
+      <a href="{% url 'homepage:add-machineryactivities' Number_plate=machinery.Number_plate %}" class="add-button">
+        <i class='bx bx-plus'></i> Add an Activity
+      </a>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div id="deleteModal" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-icon">
+          <i class='bx bx-trash'></i>
+        </div>
+        <h2 class="modal-title">Delete Activity?</h2>
+      </div>
+      <div class="modal-body">
+        <p>You are about to delete:</p>
+        <div class="modal-activity-info" id="activityInfo"></div>
+        <p class="modal-warning">This action cannot be undone</p>
+      </div>
+      <div class="modal-buttons">
+        <button class="modal-button modal-cancel" onclick="closeDeleteModal()">
+          Cancel
+        </button>
+        <button class="modal-button modal-confirm" onclick="confirmDelete()">
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let deleteUrl = '';
+
+    function showDeleteModal(event, activityDate, activityType) {
+      event.preventDefault();
+      deleteUrl = event.target.closest('a').href;
+
+      document.getElementById('activityInfo').textContent = activityType + ' - ' + activityDate;
+      document.getElementById('deleteModal').classList.add('active');
+    }
+
+    function closeDeleteModal() {
+      document.getElementById('deleteModal').classList.remove('active');
+      deleteUrl = '';
+    }
+
+    function confirmDelete() {
+      if (deleteUrl) {
+        window.location.href = deleteUrl;
+      }
+    }
+
+    // Close modal when clicking outside
+    document.getElementById('deleteModal').addEventListener('click', function(event) {
+      if (event.target === this) {
+        closeDeleteModal();
+      }
+    });
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape') {
+        closeDeleteModal();
+      }
+    });
+  </script>
 </body>
 {%endblock%}

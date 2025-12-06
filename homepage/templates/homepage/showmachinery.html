@@ -1,166 +1,709 @@
-{%extends 'homepage/base.html'%}
-{%block content%}
+{% extends 'homepage/base.html' %}
+{% block content %}
 <head>
     <title>Show Machinery</title>
-<style>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-  body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 0;
-  }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: transparent;
+            padding: 20px;
+            position: relative;
+        }
 
-  h1 {
-    color: #333;
-    text-align: center;
-  }
+        /* Decorative background */
+        body::before {
+            content: '🚜';
+            position: fixed;
+            top: 10%;
+            right: 5%;
+            font-size: 100px;
+            opacity: 0.04;
+            animation: floatMachine 12s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
 
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-  }
+        @keyframes floatMachine {
+            0%, 100% { transform: translate(0, 0) rotate(-3deg); }
+            50% { transform: translate(30px, -30px) rotate(3deg); }
+        }
 
-  th,
-  td {
-    border: 1px solid #ddd;
-    padding: 10px;
-    text-align: left;
-  }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            animation: fadeInUp 0.7s ease;
+            position: relative;
+            z-index: 1;
+        }
 
-  th {
-    background-color: #4caf50;
-    color: white;
-  }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-  tr:nth-child(even) {
-    background-color: #f2f2f2;
-  }
+        h1 {
+            color: #2d5a2d;
+            text-align: center;
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 40px;
+            background: linear-gradient(135deg, #2d5a2d 0%, #4caf50 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 0.5px;
+            position: relative;
+            padding-bottom: 20px;
+            animation: titleSlide 0.8s ease;
+        }
 
-  .update-link,
-  .delete-link {
-    display: inline-block;
-    padding: 5px 10px;
-    text-decoration: none;
-    color: #fff;
-    border-radius: 3px;
-    margin-right: 5px;
-  }
+        @keyframes titleSlide {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
 
-  .update-link {
-    background-color: #3498db;
-  }
+        h1::before {
+            content: '🔧';
+            margin-right: 15px;
+            font-size: 38px;
+            opacity: 0.8;
+        }
 
-  .delete-link {
-    background-color: #e74c3c;
-  }
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, #4caf50, transparent);
+            border-radius: 2px;
+        }
 
-  .add-button {
-    display: inline-block;
-    padding: 10px;
-    background-color: #4caf50;
-    color: white;
-    text-decoration: none;
-    border-radius: 3px;
-    margin-top: 20px;
-  }
-  
-  .update-link,
-  .delete-link {
-    display: inline-block;
-    padding: 5px 10px;
-    text-decoration: none;
-    color: #fff;
-    border-radius: 3px;
-    margin-right: 5px;
-  }
+        /* Table wrapper for shadow and animation */
+        .table-wrapper {
+            background: #ffffff;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow:
+                0 20px 60px rgba(0, 0, 0, 0.12),
+                0 0 0 1px rgba(76, 175, 80, 0.1);
+            margin-bottom: 30px;
+            animation: tableAppear 0.8s ease 0.2s backwards;
+        }
 
-  .update-link {
-    background-color: #3498db;
-  }
+        @keyframes tableAppear {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
 
-  .delete-link {
-    background-color: #e74c3c;
-  }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0;
+        }
 
-  .add-button {
-    display: inline-block;
-    padding: 10px;
-    background-color: #4caf50;
-    color: white;
-    text-decoration: none;
-    border-radius: 3px;
-    margin-top: 20px;
-  }
-  
-  .expenses-link {
-    display: inline-block;
-    padding: 5px 10px;
-    margin: 5px;
-    text-align: center;
-    text-decoration: none;
-    border: 2px solid #3498db;
-    color: #3498db;
-    border-radius: 5px;
-    transition: background-color 0.3s, color 0.3s;
-  }
-  
-  .expenses-link:hover {
-    background-color: #3498db;
-    color: #fff;
-  }
-  
-</style>
+        th,
+        td {
+            padding: 18px 20px;
+            text-align: left;
+            border: none;
+            border-bottom: 1px solid #f0f4f0;
+        }
+
+        thead {
+            background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%);
+            position: relative;
+        }
+
+        thead::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #2d5a2d, #4caf50, #66bb6a, #4caf50, #2d5a2d);
+        }
+
+        th {
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            border: none;
+            white-space: nowrap;
+        }
+
+        tbody tr {
+            transition: all 0.3s ease;
+            animation: rowFadeIn 0.5s ease backwards;
+        }
+
+        tbody tr:nth-child(1) { animation-delay: 0.1s; }
+        tbody tr:nth-child(2) { animation-delay: 0.15s; }
+        tbody tr:nth-child(3) { animation-delay: 0.2s; }
+        tbody tr:nth-child(4) { animation-delay: 0.25s; }
+        tbody tr:nth-child(5) { animation-delay: 0.3s; }
+
+        @keyframes rowFadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        tbody tr:hover {
+            background: linear-gradient(90deg, #f8fdf8, #ffffff);
+            transform: scale(1.01);
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.1);
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #fafcfa;
+        }
+
+        tbody tr:nth-child(even):hover {
+            background: linear-gradient(90deg, #f8fdf8, #fafcfa);
+        }
+
+        td {
+            color: #2d5a2d;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* Link styles */
+        .expenses-link,
+        .update-link,
+        .delete-link {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            margin: 3px;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid;
+        }
+
+        /* Ripple effect for links */
+        .expenses-link::before,
+        .update-link::before,
+        .delete-link::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.5s, height 0.5s;
+        }
+
+        .expenses-link:hover::before,
+        .update-link:hover::before,
+        .delete-link:hover::before {
+            width: 200px;
+            height: 200px;
+        }
+
+        .expenses-link {
+            background: transparent;
+            color: #3498db;
+            border-color: #3498db;
+        }
+
+        .expenses-link::before {
+            background: rgba(52, 152, 219, 0.15);
+        }
+
+        .expenses-link:hover {
+            background: #3498db;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.3);
+        }
+
+        .update-link {
+            background: linear-gradient(135deg, #3498db, #5dade2);
+            color: white;
+            border-color: #3498db;
+        }
+
+        .update-link::before {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .update-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+            background: linear-gradient(135deg, #2980b9, #3498db);
+        }
+
+        .delete-link {
+            background: linear-gradient(135deg, #e74c3c, #ec7063);
+            color: white;
+            border-color: #e74c3c;
+        }
+
+        .delete-link::before {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .delete-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+            background: linear-gradient(135deg, #c0392b, #e74c3c);
+        }
+
+        /* Simple Delete Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            animation: modalPop 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @keyframes modalPop {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h3 {
+            color: #e74c3c;
+            font-size: 22px;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .modal-body {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .modal-body p {
+            color: #5a6a5a;
+            font-size: 15px;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        .modal-machinery-name {
+            color: #2d5a2d;
+            font-weight: 600;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .modal-button {
+            padding: 10px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .modal-confirm {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .modal-confirm:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+
+        .modal-cancel {
+            background: #95a5a6;
+            color: white;
+        }
+
+        .modal-cancel:hover {
+            background: #7f8c8d;
+            transform: translateY(-2px);
+        }
+
+        /* Add button */
+        .button-container {
+            text-align: center;
+            animation: buttonFade 0.8s ease 0.4s backwards;
+        }
+
+        @keyframes buttonFade {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .add-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 16px 40px;
+            background: linear-gradient(135deg, #4caf50 0%, #5cb860 50%, #66bb6a 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.35);
+            position: relative;
+            overflow: hidden;
+            border: none;
+        }
+
+        .add-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .add-button:hover::before {
+            width: 400px;
+            height: 400px;
+        }
+
+        .add-button:hover {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 12px 35px rgba(76, 175, 80, 0.5);
+            background: linear-gradient(135deg, #3c9f40 0%, #4caf50 50%, #5cb860 100%);
+        }
+
+        .add-button:active {
+            transform: translateY(-2px) scale(1.03);
+        }
+
+        .add-button::after {
+            content: '+';
+            font-size: 22px;
+            margin-left: 10px;
+            font-weight: bold;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+        }
+
+        .empty-state::before {
+            content: '🚜';
+            font-size: 80px;
+            display: block;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+
+        .empty-state h3 {
+            color: #6b7b6b;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .empty-state p {
+            color: #9e9e9e;
+            font-size: 16px;
+        }
+
+        /* Responsive design */
+        @media (max-width: 1200px) {
+            .table-wrapper {
+                overflow-x: auto;
+            }
+
+            table {
+                min-width: 1000px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 32px;
+            }
+
+            h1::before {
+                font-size: 28px;
+                margin-right: 10px;
+            }
+
+            th,
+            td {
+                padding: 14px 12px;
+                font-size: 13px;
+            }
+
+            .expenses-link,
+            .update-link,
+            .delete-link {
+                padding: 6px 12px;
+                font-size: 12px;
+                margin: 2px;
+            }
+
+            .add-button {
+                padding: 14px 32px;
+                font-size: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 28px;
+                margin-bottom: 30px;
+            }
+
+            .add-button {
+                padding: 12px 28px;
+                font-size: 14px;
+            }
+        }
+
+        /* Action column flex layout */
+        td:last-child {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        /* Loading animation */
+        @keyframes shimmer {
+            0% {
+                background-position: -1000px 0;
+            }
+            100% {
+                background-position: 1000px 0;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>Machinery Details</h1>
-    <table>
-        <thead>
-            <tr>
-              <th>Number Plate/ Unique Number</th>
-              <th>Equipment Name</th>
-              <th>Purchase Price</th>
-              <th>Purchase Date</th>
-              <th>Operations</th>
-              
-              <th>Activities</th>
+    <div class="container">
+        <h1>Machinery Details</h1>
 
-              <th>Maintenance and Repair</th>
+        {% if machinery %}
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Machinery ID</th>
+                        <th>Equipment Name</th>
+                        <th>Purchase Price</th>
+                        <th>Purchase Date</th>
+                        <th>Operations</th>
+                        <th>Activities</th>
+                        <th>Maintenance & Repair</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for machinery in machinery %}
+                    <tr>
+                        <td>{{ machinery.Number_plate }}</td>
+                        <td>{{ machinery.Equipment_name }}</td>
+                        <td>{{ machinery.Purchase_price }}</td>
+                        <td>{{ machinery.Purchase_date }}</td>
+                        <td>{{ machinery.Operation }}</td>
 
-              <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for machinery in machinery %}
-            <tr>
-              <td>{{ machinery.Number_plate }}</td>
-              <td>{{ machinery.Equipment_name }}</td>
-              <td>{{ machinery.Purchase_price }}</td>
-              <td>{{ machinery.Purchase_date }}</td>
-              <td>{{ machinery.Operation }}</td>
-              
-                
-                
-                <td>
-                  <a href="{% url 'homepage:show-machineryactivities' Number_plate=machinery.Number_plate %}" class=expenses-link>Activities</a>
-               </td>
+                        <td>
+                            <a href="{% url 'homepage:show-machineryactivities' Number_plate=machinery.Number_plate %}" class="expenses-link">
+                                View Activities
+                            </a>
+                        </td>
 
+                        <td>
+                            <a href="{% url 'homepage:show-machinerymaintenance' Number_plate=machinery.Number_plate %}" class="expenses-link">
+                                View Records
+                            </a>
+                        </td>
 
-               
-               <td>
-                <a href="{% url 'homepage:show-machinerymaintenance' Number_plate=machinery.Number_plate %}" class=expenses-link>Maintenance and Repair</a>
-             </td>
+                        <td>
+                            <a href="{% url 'homepage:update-machinery' Number_plate=machinery.Number_plate %}" class="update-link">
+                                Update
+                            </a>
+                            <a href="#"
+                               class="delete-link"
+                               onclick="showDeleteModal(event, '{{ machinery.Number_plate }}', '{{ machinery.Equipment_name }}')">
+                                Delete
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <h3>No Machinery Found</h3>
+            <p>Start by adding your first piece of machinery</p>
+        </div>
+        {% endif %}
 
+        <div class="button-container">
+            <a href="{% url 'homepage:add-machinery' %}" class="add-button">
+                Add Machinery
+            </a>
+        </div>
+    </div>
 
-                <td>
-                <a href="{% url 'homepage:update-machinery' Number_plate=machinery.Number_plate%}" class="update-link">update</a>
-                <a href="{% url 'homepage:delete-machinery' Number_plate=machinery.Number_plate %}"class="delete-link">Delete</a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <a href="{% url 'homepage:add-machinery' %}" class="add-button">Add</a>
+    <!-- Simple Delete Confirmation Modal -->
+    <div id="deleteModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Delete Machinery?</h3>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete</p>
+                <div class="modal-machinery-name" id="machineryName"></div>
+                <p>This action cannot be undone.</p>
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-button modal-cancel" onclick="closeDeleteModal()">Cancel</button>
+                <a id="confirmDeleteBtn" href="#" class="modal-button modal-confirm">Delete</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showDeleteModal(event, numberPlate, equipmentName) {
+            event.preventDefault();
+
+            // Build the delete URL
+            const deleteUrl = "{% url 'homepage:delete-machinery' Number_plate='PLACEHOLDER' %}".replace('PLACEHOLDER', numberPlate);
+
+            // Set machinery name
+            document.getElementById('machineryName').textContent = equipmentName;
+
+            // Set the delete button URL
+            document.getElementById('confirmDeleteBtn').href = deleteUrl;
+
+            // Show modal
+            document.getElementById('deleteModal').classList.add('active');
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').classList.remove('active');
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('deleteModal').addEventListener('click', function(event) {
+            if (event.target === this) {
+                closeDeleteModal();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeDeleteModal();
+            }
+        });
+    </script>
 </body>
-{%endblock%}
+{% endblock %}

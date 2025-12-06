@@ -1,5 +1,5 @@
 from django import forms
-from .models import Crops,Crop_expenses,Crop_sales,Crop_operations
+from .models import *
 
 
 class CropsForm(forms.ModelForm):

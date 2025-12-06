@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from decimal import Decimal
 from django.core.validators import MaxValueValidator,MinValueValidator
+from django.contrib import messages
 
 # Create your models here.
 
@@ -11,12 +12,13 @@ class Employees(models.Model):
 
     Eid = models.IntegerField(primary_key=True, default=0)
     Name = models.CharField(max_length=50)
-    Country_code = models.CharField(max_length=4)
-    Phone_number = models.CharField(max_length=9)
+    Phone_number = models.CharField(max_length=10)
     Position = models.CharField(max_length=10)
     Salary = models.IntegerField()
-    Performance = models.CharField(max_length=10)
 
+
+    def __str__(self):
+        return self.Name
     class Meta:
         db_table = "employees"
 
@@ -97,10 +99,10 @@ class Crop_operations(models.Model):
         
 class Machinery(models.Model):
     user=models.ForeignKey(User, on_delete=models.CASCADE,default=1)
-    
-    Number_plate= models.CharField(max_length=20, primary_key=True)
+
+    Number_plate = models.IntegerField(primary_key=True,default=0)
     Equipment_name= models.CharField(max_length=20)
-    Purchase_price= models.DecimalField(max_digits=10,decimal_places=2, default=0)
+    Purchase_price= models.DecimalField(max_digits=10,decimal_places=2)
     Purchase_date = models.DateField()
     Operation=models.TextField(blank=True)
 
@@ -128,7 +130,7 @@ class Machinery_maintenance(models.Model):
     Description=models.TextField()
 
     class Meta:
-        db_table="Machinery_activities"
+        db_table="Machinery_maintenance"
 
 
 class Livestock(models.Model):
@@ -146,6 +148,7 @@ class Livestock(models.Model):
 
 class Livestock_production(models.Model):
     livestock=models.ForeignKey(Livestock,on_delete=models.CASCADE)
+
     Production_date=models.DateField(help_text='m/d/y')
     Production_amount=models.CharField(max_length=20)
     Feed_consumed=models.DecimalField(max_digits=10,decimal_places=2,help_text='field consumed in kg')
@@ -154,12 +157,14 @@ class Livestock_production(models.Model):
     class Meta:
         db_table="Livestock_production"
 
+
 class Milk_production(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE, default=1)
 
 
     Year=models.IntegerField(validators=[MinValueValidator(1)])
-    Month=models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(12)])
+    Month = models.IntegerField(choices=[(i, i) for i in range(1, 13)])  # 1-12
+    # ... other field
     Day=models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(31)],default=1)
 
     Livestock_number=models.IntegerField()
