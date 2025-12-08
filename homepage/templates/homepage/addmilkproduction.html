@@ -2,74 +2,406 @@
 
 {% block content %}
 <head>
-    <title>add production</title>
-    {%load static%}  
+    <title>Add Milk Production</title>
+    {% load static %}
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <style>
-
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
+            font-family: "Poppins", Arial, sans-serif;
+            background: linear-gradient(135deg, #e8f3e4 0%, #f6faf4 100%);
             margin: 0;
+            padding: 30px 20px;
+            animation: fadeIn 0.6s ease;
+            min-height: 100vh;
         }
-        
-        h1 {
+
+        .form-container {
+            max-width: 650px;
+            margin: 0 auto;
+            animation: slideUp 0.7s ease;
+        }
+
+        .form-header {
             text-align: center;
-            color: black;
+            margin-bottom: 30px;
         }
 
+        .form-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #4c8c2b 0%, #66bb6a 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 36px;
+            margin: 0 auto 20px;
+            box-shadow: 0 8px 20px rgba(76, 140, 43, 0.3);
+        }
 
-        
-        form {
-            background-color: #fff;
-            border: 1px solid #ccc;
-            padding: 20px;
-            margin-top: 20px;
-            max-width: 500px;
-            margin-left: auto;
-            margin-right: auto;
+        h1 {
+            color: #2f5d2f;
+            font-weight: 600;
+            margin: 0 0 12px 0;
+            font-size: 2em;
+            line-height: 1.3;
         }
-        
-        label {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: bold;
-            color: #333;
-        }
-        
-        input[type="text"],
-        input[type="date"],
-        input[type="number"] {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-            margin-bottom: 15px;
-        }
-        
-        input[type="submit"] {
-            background-color: #4CAF50;
+
+        .period-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%);
             color: white;
             padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
+            border-radius: 20px;
+            font-size: 15px;
+            font-weight: 600;
+            margin-top: 10px;
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+        }
+
+        .period-badge i {
+            font-size: 18px;
+        }
+
+        form {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        form p {
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        label i {
+            color: #4c8c2b;
             font-size: 16px;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="number"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            box-sizing: border-box;
+            font-size: 14px;
+            font-family: "Poppins", Arial, sans-serif;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        input[type="text"]:focus,
+        input[type="date"]:focus,
+        input[type="number"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #4c8c2b;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(76, 140, 43, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .helptext {
+            display: block;
+            font-size: 12px;
+            color: #888;
+            margin-top: 6px;
+            font-style: italic;
+        }
+
+        .errorlist {
+            list-style: none;
+            padding: 0;
+            margin: 8px 0 0 0;
+        }
+
+        .errorlist li {
+            color: #d32f2f;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 4px;
+        }
+
+        .errorlist li::before {
+            content: "⚠";
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        button[type="submit"],
+        .btn {
+            flex: 1;
+            padding: 14px 28px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            font-family: "Poppins", Arial, sans-serif;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        button[type="submit"] {
+            background: linear-gradient(135deg, #4c8c2b 0%, #66bb6a 100%);
+            color: white;
+            box-shadow: 0 4px 14px rgba(76, 140, 43, 0.3);
+        }
+
+        button[type="submit"]:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(76, 140, 43, 0.4);
+        }
+
+        button[type="submit"]:active {
+            transform: translateY(0);
+        }
+
+        .btn-cancel {
+            background: #f5f5f5;
+            color: #666;
+            border: 2px solid #ddd;
+        }
+
+        .btn-cancel:hover {
+            background: #e8e8e8;
+            transform: translateY(-2px);
+        }
+
+        /* Info card for context */
+        .info-card {
+            background: linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 100%);
+            border-left: 4px solid #4c8c2b;
+            padding: 16px 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: start;
+            gap: 12px;
+        }
+
+        .info-card i {
+            font-size: 24px;
+            color: #4c8c2b;
+            margin-top: 2px;
+        }
+
+        .info-content h3 {
+            margin: 0 0 6px 0;
+            font-size: 16px;
+            font-weight: 600;
+            color: #2f5d2f;
+        }
+
+        .info-content p {
+            margin: 0;
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            form {
+                padding: 28px 20px;
+            }
+
+            h1 {
+                font-size: 1.6em;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .form-icon {
+                width: 70px;
+                height: 70px;
+                font-size: 32px;
+            }
+        }
+
+        /* Django form styling enhancement */
+        form > p > label {
+            text-transform: capitalize;
+        }
+
+        /* Required field indicator */
+        .required::after {
+            content: " *";
+            color: #d32f2f;
+        }
+
+        /* Production quantity highlight */
+        .production-highlight {
+            background: linear-gradient(135deg, #fff9e6 0%, #fff3cd 100%);
+            border: 2px solid #ffc107;
+            border-radius: 10px;
+            padding: 16px;
             margin-top: 10px;
         }
-        
-        input[type="submit"]:hover {
-            background-color: #45a049;
+
+        .production-highlight input {
+            font-size: 18px;
+            font-weight: 600;
+            text-align: center;
+            background: white;
         }
     </style>
 </head>
+
 <body>
-  <h1>Add Milk Production for the month {{ selected_month }}  and the Year {{ selected_year }}</h1>
-  
-  <form method="post" action="">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Add Production</button>
-  </form>
+    <div class="form-container">
+        <div class="form-header">
+            <div class="form-icon">
+                <i class='bx bx-droplet'></i>
+            </div>
+            <h1>Add Milk Production</h1>
+            <div class="period-badge">
+                <i class='bx bx-calendar'></i>
+                {{ selected_month }} {{ selected_year }}
+            </div>
+        </div>
+
+        <form method="post" action="">
+            {% csrf_token %}
+
+            <div class="info-card">
+                <i class='bx bx-info-circle'></i>
+                <div class="info-content">
+                    <h3>Recording Production Data</h3>
+                    <p>Enter the daily milk production details for {{ selected_month }} {{ selected_year }}. Make sure to include accurate measurements for tracking purposes.</p>
+                </div>
+            </div>
+
+            {{ form.as_p }}
+
+            <div class="form-actions">
+                <a href="javascript:history.back()" class="btn btn-cancel">
+                    <i class='bx bx-x'></i> Cancel
+                </a>
+                <button type="submit">
+                    <i class='bx bx-plus'></i> Add Production
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Add icons to form fields dynamically
+        document.addEventListener('DOMContentLoaded', function() {
+            const labels = document.querySelectorAll('form p label');
+
+            labels.forEach(label => {
+                const labelText = label.textContent.toLowerCase();
+                let icon = 'bx-pencil';
+
+                // Assign icons based on field name
+                if (labelText.includes('date')) {
+                    icon = 'bx-calendar';
+                } else if (labelText.includes('quantity') || labelText.includes('amount') || labelText.includes('production')) {
+                    icon = 'bx-droplet';
+                } else if (labelText.includes('animal') || labelText.includes('cow')) {
+                    icon = 'bx-dog';
+                } else if (labelText.includes('quality') || labelText.includes('grade')) {
+                    icon = 'bx-award';
+                } else if (labelText.includes('note') || labelText.includes('comment')) {
+                    icon = 'bx-note';
+                } else if (labelText.includes('temperature')) {
+                    icon = 'bx-thermometer';
+                }
+
+                // Create icon element
+                const iconElement = document.createElement('i');
+                iconElement.className = `bx ${icon}`;
+                label.insertBefore(iconElement, label.firstChild);
+            });
+
+            // Mark required fields
+            document.querySelectorAll('input[required], select[required], textarea[required]').forEach(field => {
+                const label = field.parentElement.querySelector('label');
+                if (label && !label.classList.contains('required')) {
+                    label.classList.add('required');
+                }
+            });
+
+            // Add highlight to production quantity field
+            const productionFields = document.querySelectorAll('input[name*="quantity" i], input[name*="production" i], input[name*="amount" i]');
+            productionFields.forEach(field => {
+                if (field.type === 'number') {
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'production-highlight';
+                    field.parentNode.insertBefore(wrapper, field);
+                    wrapper.appendChild(field);
+                }
+            });
+        });
+
+        // Auto-format number inputs
+        document.querySelectorAll('input[type="number"]').forEach(input => {
+            input.addEventListener('blur', function() {
+                if (this.value && this.step !== '1') {
+                    this.value = parseFloat(this.value).toFixed(2);
+                }
+            });
+        });
+    </script>
 </body>
 {% endblock %}

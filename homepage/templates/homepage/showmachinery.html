@@ -675,7 +675,7 @@
             event.preventDefault();
 
             // Build the delete URL
-            const deleteUrl = "{% url 'homepage:delete-machinery' Number_plate='PLACEHOLDER' %}".replace('PLACEHOLDER', numberPlate);
+            const deleteUrl =  '/delete_machinery/' + numberPlate;
 
             // Set machinery name
             document.getElementById('machineryName').textContent = equipmentName;

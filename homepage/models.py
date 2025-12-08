@@ -12,8 +12,8 @@ class Employees(models.Model):
 
     Eid = models.IntegerField(primary_key=True, default=0)
     Name = models.CharField(max_length=50)
-    Phone_number = models.CharField(max_length=10)
-    Position = models.CharField(max_length=10)
+    Phone_number = models.CharField(max_length=20)
+    Position = models.CharField(max_length=50)
     Salary = models.IntegerField()
 
 

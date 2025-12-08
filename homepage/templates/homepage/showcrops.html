@@ -564,7 +564,7 @@
 
     function showDeleteModal(event, cropId, cropName) {
       event.preventDefault();
-      deleteUrl = event.target.closest('a').href;
+    deleteUrl = '/delete_crops/' + cropId;
 
       document.getElementById('cropInfo').textContent = cropName + ' (ID: ' + cropId + ')';
       document.getElementById('deleteModal').classList.add('active');

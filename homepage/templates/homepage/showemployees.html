@@ -3,6 +3,7 @@
 <head>
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <style>
+        /* Base styles */
         body {
             font-family: "Poppins", Arial, sans-serif;
             background: linear-gradient(135deg, #e8f3e4 0%, #f6faf4 100%);
@@ -16,6 +17,7 @@
             margin: 0 auto;
         }
 
+        /* Header styles */
         h1 {
             text-align: center;
             color: #2f5d2f;
@@ -34,6 +36,7 @@
             color: #4c8c2b;
         }
 
+        /* Employee grid layout */
         .employees-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -41,6 +44,7 @@
             margin-bottom: 30px;
         }
 
+        /* Employee card styles */
         .employee-card {
             background: white;
             border-radius: 16px;
@@ -52,6 +56,7 @@
             overflow: hidden;
         }
 
+        /* Green accent bar at top of card */
         .employee-card::before {
             content: '';
             position: absolute;
@@ -62,11 +67,13 @@
             background: linear-gradient(135deg, #4c8c2b 0%, #66bb6a 100%);
         }
 
+        /* Card hover effect */
         .employee-card:hover {
             transform: translateY(-6px);
             box-shadow: 0 8px 35px rgba(0, 0, 0, 0.12);
         }
 
+        /* Employee header section */
         .employee-header {
             display: flex;
             align-items: center;
@@ -76,6 +83,7 @@
             border-bottom: 2px solid #f0f0f0;
         }
 
+        /* Avatar circle with first letter */
         .employee-avatar {
             width: 64px;
             height: 64px;
@@ -91,6 +99,7 @@
             box-shadow: 0 4px 12px rgba(76, 140, 43, 0.3);
         }
 
+        /* Employee name and ID section */
         .employee-info {
             flex: 1;
             min-width: 0;
@@ -115,6 +124,7 @@
             gap: 4px;
         }
 
+        /* Employee details section */
         .employee-details {
             display: flex;
             flex-direction: column;
@@ -122,12 +132,14 @@
             margin-bottom: 20px;
         }
 
+        /* Individual detail row */
         .detail-row {
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
+        /* Icon container for each detail */
         .detail-icon {
             width: 36px;
             height: 36px;
@@ -146,6 +158,7 @@
             min-width: 0;
         }
 
+        /* Label styling (PHONE, POSITION, SALARY) */
         .detail-label {
             font-size: 11px;
             color: #888;
@@ -155,6 +168,7 @@
             margin-bottom: 2px;
         }
 
+        /* Value styling for detail content */
         .detail-value {
             font-size: 14px;
             color: #333;
@@ -164,6 +178,7 @@
             white-space: nowrap;
         }
 
+        /* Salary badge with gradient background */
         .salary-badge {
             display: inline-flex;
             align-items: center;
@@ -176,11 +191,13 @@
             color: white;
         }
 
+        /* Action buttons container */
         .employee-actions {
             display: flex;
             gap: 8px;
         }
 
+        /* Base styling for all action buttons */
         .action-button {
             flex: 1;
             display: inline-flex;
@@ -194,8 +211,11 @@
             font-weight: 600;
             transition: all 0.2s ease;
             cursor: pointer;
+            border: none;
+            font-family: "Poppins", Arial, sans-serif;
         }
 
+        /* Update button styling */
         .action-update {
             background: #2f80ed;
             color: white;
@@ -204,8 +224,10 @@
         .action-update:hover {
             background: #1e6dd8;
             transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(47, 128, 237, 0.3);
         }
 
+        /* Delete button styling - IMPROVED */
         .action-delete {
             background: #d64545;
             color: white;
@@ -214,13 +236,16 @@
         .action-delete:hover {
             background: #c23838;
             transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(214, 69, 69, 0.3);
         }
 
+        /* Add button container */
         .add-container {
             text-align: center;
             animation: fadeInUp 0.8s ease;
         }
 
+        /* Add employee button */
         .add-button {
             display: inline-flex;
             align-items: center;
@@ -241,6 +266,7 @@
             background: linear-gradient(135deg, #3a6f23 0%, #4c8c2b 100%);
         }
 
+        /* Empty state message */
         .no-employees {
             text-align: center;
             color: #558b2f;
@@ -252,7 +278,7 @@
             animation: fadeIn 0.8s ease-out;
         }
 
-        /* Modal Styles */
+        /* Modal overlay (backdrop) */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -265,12 +291,14 @@
             animation: modalFadeIn 0.3s ease;
         }
 
+        /* Show modal when active */
         .modal-overlay.active {
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
+        /* Modal container */
         .modal {
             background: white;
             border-radius: 12px;
@@ -281,11 +309,13 @@
             animation: modalSlideIn 0.3s ease;
         }
 
+        /* Modal header section */
         .modal-header {
             text-align: center;
             margin-bottom: 20px;
         }
 
+        /* Modal icon (trash icon) */
         .modal-icon {
             width: 64px;
             height: 64px;
@@ -299,6 +329,7 @@
             margin: 0 auto 12px;
         }
 
+        /* Modal title text */
         .modal-title {
             font-size: 1.4em;
             font-weight: 600;
@@ -306,6 +337,7 @@
             margin: 0;
         }
 
+        /* Modal body content */
         .modal-body {
             margin-bottom: 24px;
             color: #666;
@@ -314,6 +346,7 @@
             text-align: center;
         }
 
+        /* Employee info display in modal */
         .modal-employee-info {
             background: #f8f9fa;
             padding: 12px 16px;
@@ -324,6 +357,7 @@
             font-size: 1.1em;
         }
 
+        /* Warning message in modal */
         .modal-warning {
             margin-top: 12px;
             color: #999;
@@ -331,12 +365,14 @@
             font-size: 0.9em;
         }
 
+        /* Modal buttons container */
         .modal-buttons {
             display: flex;
             gap: 10px;
             justify-content: center;
         }
 
+        /* Base styling for modal buttons */
         .modal-button {
             padding: 11px 32px;
             border: none;
@@ -348,6 +384,7 @@
             font-family: "Poppins", Arial, sans-serif;
         }
 
+        /* Cancel button styling */
         .modal-cancel {
             background: #f5f5f5;
             color: #666;
@@ -359,6 +396,7 @@
             transform: translateY(-1px);
         }
 
+        /* Confirm delete button styling */
         .modal-confirm {
             background: #d64545;
             color: white;
@@ -401,7 +439,7 @@
             }
         }
 
-        /* Responsive */
+        /* Responsive design for mobile devices */
         @media (max-width: 768px) {
             h1 {
                 font-size: 1.6em;
@@ -432,15 +470,18 @@
 </head>
 <body>
     <div class="container">
+        <!-- Page header with icon -->
         <h1>
             <i class='bx bx-user-check'></i>
             Employees Details
         </h1>
 
         {% if employees %}
+            <!-- Grid of employee cards -->
             <div class="employees-grid">
                 {% for employee in employees %}
                     <div class="employee-card">
+                        <!-- Employee header with avatar and name -->
                         <div class="employee-header">
                             <div class="employee-avatar">
                                 {{ employee.Name|first|upper }}
@@ -454,7 +495,9 @@
                             </div>
                         </div>
 
+                        <!-- Employee details (phone, position, salary) -->
                         <div class="employee-details">
+                            <!-- Phone number -->
                             <div class="detail-row">
                                 <div class="detail-icon">
                                     <i class='bx bx-phone'></i>
@@ -465,6 +508,7 @@
                                 </div>
                             </div>
 
+                            <!-- Position -->
                             <div class="detail-row">
                                 <div class="detail-icon">
                                     <i class='bx bx-briefcase'></i>
@@ -475,6 +519,7 @@
                                 </div>
                             </div>
 
+                            <!-- Salary -->
                             <div class="detail-row">
                                 <div class="detail-icon">
                                     <i class='bx bx-money'></i>
@@ -491,21 +536,26 @@
                             </div>
                         </div>
 
+                        <!-- Action buttons (Update and Delete) -->
                         <div class="employee-actions">
+                            <!-- Update button -->
                             <a href="{% url 'homepage:update-employees' Eid=employee.Eid %}" class="action-button action-update">
                                 <i class='bx bx-edit-alt'></i> Update
                             </a>
-                            <a href="#" class="action-button action-delete" onclick="showDeleteModal(event, '{{ employee.Eid }}', '{{ employee.Name }}')">
+                            <!-- Delete button with modal trigger -->
+                            <button class="action-button action-delete" onclick="showDeleteModal(event, '{{ employee.Eid }}', '{{ employee.Name }}')">
                                 <i class='bx bx-trash'></i> Delete
-                            </a>
+                            </button>
                         </div>
                     </div>
                 {% endfor %}
             </div>
         {% else %}
+            <!-- Empty state when no employees exist -->
             <p class="no-employees">👥 No employees found. Add your first employee to get started.</p>
         {% endif %}
 
+        <!-- Add new employee button -->
         <div class="add-container">
             <a href="{% url 'homepage:add-employees' %}" class="add-button">
                 <i class='bx bx-plus'></i> Add an Employee
@@ -516,17 +566,20 @@
     <!-- Delete Confirmation Modal -->
     <div id="deleteModal" class="modal-overlay">
         <div class="modal">
+            <!-- Modal header with trash icon -->
             <div class="modal-header">
                 <div class="modal-icon">
                     <i class='bx bx-trash'></i>
                 </div>
                 <h2 class="modal-title">Delete Employee?</h2>
             </div>
+            <!-- Modal body with employee info and warning -->
             <div class="modal-body">
                 <p>You are about to delete:</p>
                 <div class="modal-employee-info" id="employeeInfo"></div>
                 <p class="modal-warning">This action cannot be undone</p>
             </div>
+            <!-- Modal action buttons -->
             <div class="modal-buttons">
                 <button class="modal-button modal-cancel" onclick="closeDeleteModal()">
                     Cancel
@@ -539,34 +592,50 @@
     </div>
 
     <script>
+        // Store the delete URL for confirmation
         let deleteUrl = '';
 
+        /**
+         * Show the delete confirmation modal
+         * @param {Event} event - Click event
+         * @param {string} employeeId - Employee ID to delete
+         * @param {string} employeeName - Employee name to display
+         */
         function showDeleteModal(event, employeeId, employeeName) {
             event.preventDefault();
+            // Construct delete URL
             deleteUrl = '/deleteEmployees/' + employeeId;
+            // Display employee info in modal
             document.getElementById('employeeInfo').textContent = employeeName + ' (ID: ' + employeeId + ')';
+            // Show modal
             document.getElementById('deleteModal').classList.add('active');
         }
 
+        /**
+         * Close the delete confirmation modal
+         */
         function closeDeleteModal() {
             document.getElementById('deleteModal').classList.remove('active');
             deleteUrl = '';
         }
 
+        /**
+         * Confirm and execute the delete action
+         */
         function confirmDelete() {
             if (deleteUrl) {
                 window.location.href = deleteUrl;
             }
         }
 
-        // Close modal when clicking outside
+        // Close modal when clicking outside the modal content
         document.getElementById('deleteModal').addEventListener('click', function(event) {
             if (event.target === this) {
                 closeDeleteModal();
             }
         });
 
-        // Close modal with Escape key
+        // Close modal when pressing Escape key
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape') {
                 closeDeleteModal();

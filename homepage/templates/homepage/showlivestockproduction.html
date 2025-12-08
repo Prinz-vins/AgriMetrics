@@ -3,6 +3,7 @@
   <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
 
   <style>
+    /* Global styles for page layout and animation */
     body {
       font-family: "Poppins", Arial, sans-serif;
       background: linear-gradient(135deg, #e8f3e4 0%, #f6faf4 100%);
@@ -11,6 +12,7 @@
       animation: fadeIn .6s ease;
     }
 
+    /* Main heading styles */
     h1 {
       text-align: center;
       color: #2f5d2f;
@@ -21,11 +23,13 @@
       animation: slideDown .7s ease;
     }
 
+    /* Container for the table with max width */
     .table-wrapper {
       max-width: 1200px;
       margin: auto;
     }
 
+    /* Table styling with rounded corners and shadow */
     table {
       width: 100%;
       border-collapse: collapse;
@@ -37,6 +41,7 @@
       margin-top: 20px;
     }
 
+    /* Table header styling with gradient background */
     th {
       background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%);
       color: white;
@@ -46,6 +51,7 @@
       font-weight: 600;
     }
 
+    /* Table data cell styling */
     td {
       padding: 12px 14px;
       font-size: 14px;
@@ -54,14 +60,17 @@
       transition: background .2s ease;
     }
 
+    /* Alternate row coloring for better readability */
     tr:nth-child(even) {
       background-color: #f9fdf9;
     }
 
+    /* Row hover effect */
     tbody tr:hover td {
       background: #f1f9ee;
     }
 
+    /* Base styles for action buttons (Update and Delete) */
     .update-link,
     .delete-link {
       display: inline-flex;
@@ -78,6 +87,7 @@
       cursor: pointer;
     }
 
+    /* Update button - blue color */
     .update-link {
       background: #2f80ed;
     }
@@ -87,6 +97,7 @@
       opacity: .9;
     }
 
+    /* Delete button - red color */
     .delete-link {
       background: #d64545;
     }
@@ -96,12 +107,14 @@
       opacity: .9;
     }
 
+    /* Container for the "Add Production" button */
     .add-container {
       text-align: center;
       margin-top: 30px;
       animation: fadeInUp .8s ease;
     }
 
+    /* Add Production button styling */
     .add-button {
       display: inline-flex;
       align-items: center;
@@ -122,25 +135,27 @@
       background: #3a6f23;
     }
 
-    /* Modal Styles */
+    /* Modal overlay - dark background covering entire screen */
     .modal-overlay {
-      display: none;
+      display: none; /* Hidden by default */
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.6);
-      z-index: 1000;
+      background: rgba(0, 0, 0, 0.6); /* Semi-transparent black */
+      z-index: 1000; /* Appears above all other content */
       animation: modalFadeIn .3s ease;
     }
 
+    /* Show modal when active class is added */
     .modal-overlay.active {
       display: flex;
       justify-content: center;
       align-items: center;
     }
 
+    /* The actual modal box containing the content */
     .modal {
       background: white;
       border-radius: 12px;
@@ -152,24 +167,27 @@
       position: relative;
     }
 
+    /* Modal header section */
     .modal-header {
       text-align: center;
       margin-bottom: 20px;
     }
 
+    /* Circular icon container at top of modal */
     .modal-icon {
       width: 64px;
       height: 64px;
-      background: #fee;
-      border-radius: 50%;
+      background: #fee; /* Light red background */
+      border-radius: 50%; /* Makes it circular */
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #d64545;
+      color: #d64545; /* Red trash icon */
       font-size: 32px;
       margin: 0 auto 12px;
     }
 
+    /* Modal title text */
     .modal-title {
       font-size: 1.4em;
       font-weight: 600;
@@ -177,6 +195,7 @@
       margin: 0;
     }
 
+    /* Modal body content area */
     .modal-body {
       margin-bottom: 24px;
       color: #666;
@@ -185,6 +204,7 @@
       text-align: center;
     }
 
+    /* Box displaying the production information */
     .modal-production-info {
       background: #f8f9fa;
       padding: 12px 16px;
@@ -196,6 +216,7 @@
       text-align: center;
     }
 
+    /* Warning text about permanent deletion */
     .modal-warning {
       margin-top: 12px;
       color: #999;
@@ -204,12 +225,14 @@
       text-align: center;
     }
 
+    /* Container for modal action buttons */
     .modal-buttons {
       display: flex;
       gap: 10px;
       justify-content: center;
     }
 
+    /* Base styling for modal buttons */
     .modal-button {
       padding: 11px 32px;
       border: none;
@@ -221,6 +244,7 @@
       font-family: "Poppins", Arial, sans-serif;
     }
 
+    /* Cancel button - gray color */
     .modal-cancel {
       background: #f5f5f5;
       color: #666;
@@ -232,6 +256,7 @@
       transform: translateY(-1px);
     }
 
+    /* Confirm delete button - red color */
     .modal-confirm {
       background: #d64545;
       color: white;
@@ -242,27 +267,31 @@
       transform: translateY(-1px);
     }
 
-    /* Animations */
+    /* Animation: Page fade in on load */
     @keyframes fadeIn {
       from { opacity: 0; }
       to { opacity: 1; }
     }
 
+    /* Animation: Heading slides down */
     @keyframes slideDown {
       from { opacity: 0; transform: translateY(-14px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
+    /* Animation: Content fades and slides up */
     @keyframes fadeInUp {
       from { opacity: .3; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
+    /* Animation: Modal overlay fades in */
     @keyframes modalFadeIn {
       from { opacity: 0; }
       to { opacity: 1; }
     }
 
+    /* Animation: Modal box scales and slides in */
     @keyframes modalSlideIn {
       from {
         transform: scale(0.8) translateY(-30px);
@@ -274,7 +303,7 @@
       }
     }
 
-    /* Responsive */
+    /* Responsive design for smaller screens */
     @media (max-width: 768px) {
       h1 {
         font-size: 1.6em;
@@ -288,6 +317,7 @@
         padding: 10px 8px;
       }
 
+      /* Stack buttons vertically on mobile */
       .update-link,
       .delete-link {
         padding: 6px 10px;
@@ -331,19 +361,23 @@
       </tr>
     </thead>
     <tbody>
+      <!-- Loop through each production record from the database -->
       {% for production in productions %}
       <tr>
+        <!-- Display production data in table cells -->
         <td>{{ production.Production_date }}</td>
         <td>{{ production.Production_amount }}</td>
         <td>{{ production.Feed_consumed }}</td>
         <td>{{ production.Comments }}</td>
         <td>
+          <!-- Update button - links to edit page -->
           <a
             href="{% url 'homepage:update-livestockproduction' Tag_number=livestock.Tag_number Production_date=production.Production_date|date:'Y-m-d' %}"
             class="update-link"
           >
             <i class='bx bx-edit-alt'></i> Update
           </a>
+          <!-- Delete button - triggers confirmation modal -->
           <a
             href="#"
             class="delete-link"
@@ -357,6 +391,7 @@
     </tbody>
   </table>
 
+  <!-- Add new production record button -->
   <div class="add-container">
     <a
       href="{% url 'homepage:add-livestockproduction' Tag_number=livestock.Tag_number %}"
@@ -367,10 +402,11 @@
   </div>
 </div>
 
-<!-- Delete Confirmation Modal -->
+<!-- Delete Confirmation Modal (hidden by default) -->
 <div id="deleteModal" class="modal-overlay">
   <div class="modal">
     <div class="modal-header">
+      <!-- Trash icon in circular container -->
       <div class="modal-icon">
         <i class='bx bx-trash'></i>
       </div>
@@ -378,13 +414,16 @@
     </div>
     <div class="modal-body">
       <p>You are about to delete production record:</p>
+      <!-- This div will be populated with production date via JavaScript -->
       <div class="modal-production-info" id="productionInfo"></div>
       <p class="modal-warning">This action cannot be undone</p>
     </div>
     <div class="modal-buttons">
+      <!-- Cancel button - closes modal without deleting -->
       <button class="modal-button modal-cancel" onclick="closeDeleteModal()">
         Cancel
       </button>
+      <!-- Confirm button - proceeds with deletion -->
       <button class="modal-button modal-confirm" onclick="confirmDelete()">
         Delete
       </button>
@@ -393,35 +432,71 @@
 </div>
 
 <script>
+  // Global variable to store the delete URL for the selected production record
   let deleteUrl = '';
 
+  /**
+   * Shows the delete confirmation modal
+   *
+   * @param {Event} event - The click event from the delete link
+   * @param {string} tagNumber - The tag number of the livestock (e.g., "A101")
+   * @param {string} productionDate - The production date in Y-m-d format (e.g., "2025-12-07")
+   * @param {string} displayDate - The formatted date to display in the modal
+   */
   function showDeleteModal(event, tagNumber, productionDate, displayDate) {
+    // Prevent the default anchor link behavior (stops navigation)
     event.preventDefault();
-    deleteUrl = event.target.closest('a').href;
 
+    // Construct the delete URL manually to match your Django URL pattern
+    // Your Django URL pattern is: path('deleteLivestockproduction/<str:Tag_number>/<slug:Production_date>/', ...)
+    // Example result: /deleteLivestockproduction/A101/2025-12-07/
+    deleteUrl = '/deleteLivestockproduction/' + tagNumber + '/' + productionDate + '/';
+
+    // Display the production date in the modal for user confirmation
     document.getElementById('productionInfo').textContent = displayDate;
+
+    // Show the modal by adding the 'active' class
+    // This triggers the CSS to display and animate the modal
     document.getElementById('deleteModal').classList.add('active');
   }
 
+  /**
+   * Closes the delete confirmation modal
+   * Called when user clicks Cancel or clicks outside the modal
+   */
   function closeDeleteModal() {
+    // Hide the modal by removing the 'active' class
     document.getElementById('deleteModal').classList.remove('active');
+
+    // Clear the stored delete URL for security
+    // Prevents accidental deletion if modal is reopened
     deleteUrl = '';
   }
 
+  /**
+   * Confirms the deletion and navigates to the delete URL
+   * Called when user clicks the red "Delete" button in the modal
+   */
   function confirmDelete() {
+    // Only proceed if we have a valid delete URL
     if (deleteUrl) {
+      // Navigate to the delete URL
+      // This will trigger the Django view to delete the production record
+      // Django view will then redirect back to show-livestockproduction
       window.location.href = deleteUrl;
     }
   }
 
-  // Close modal when clicking outside
+  // Event listener: Close modal when clicking on the overlay (outside the modal box)
   document.getElementById('deleteModal').addEventListener('click', function(event) {
+    // Check if the click target is the overlay itself (not a child element like the modal box)
     if (event.target === this) {
       closeDeleteModal();
     }
   });
 
-  // Close modal with Escape key
+  // Event listener: Close modal when pressing the Escape key
+  // Provides a keyboard shortcut for better user experience
   document.addEventListener('keydown', function(event) {
     if (event.key === 'Escape') {
       closeDeleteModal();

@@ -1,130 +1,642 @@
-{%extends 'homepage/base.html'%}
-{%block content%}
+{% extends 'homepage/base.html' %}
+{% block content %}
 <head>
-    <title>Milk Production</title>
-<style>
+    <title>Milk Production Analytics</title>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: "Poppins", Arial, sans-serif;
+            background: linear-gradient(135deg, #e8f3e4 0%, #f6faf4 100%);
+            margin: 0;
+            padding: 20px 10px;
+            animation: fadeIn 0.6s ease;
+        }
 
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f4f4f4;
-        margin: 0;
-        padding: 0;
-      }
-  
-      h1 {
-        color: #333;
-        text-align: center;
-      }
-  
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-      }
-  
-      th,
-      td {
-        border: 1px solid #ddd;
-        padding: 10px;
-        text-align: left;
-      }
-  
-      th {
-        background-color: #4caf50;
-        color: white;
-      }
-  
-      tr:nth-child(even) {
-        background-color: #f2f2f2;
-      }
-  
-      .update-link,
-      .delete-link {
-        display: inline-block;
-        padding: 5px 10px;
-        text-decoration: none;
-        color: #fff;
-        border-radius: 3px;
-        margin-right: 5px;
-      }
-  
-      .update-link {
-        background-color: #3498db;
-      }
-  
-      .delete-link {
-        background-color: #e74c3c;
-      }
-  
-      .add-button {
-        display: inline-block;
-        padding: 10px;
-        background-color: #4caf50;
-        color: white;
-        text-decoration: none;
-        border-radius: 3px;
-        margin-top: 20px;
-      }
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
 
-     h3{
-      text-align: center;
-     }
-  
-</style>
+        /* Header Section */
+        .page-header {
+            text-align: center;
+            background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+            padding: 40px 30px;
+            border-radius: 20px;
+            color: white;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 40px rgba(76, 175, 80, 0.3);
+            animation: slideDown 0.7s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '🥛';
+            position: absolute;
+            font-size: 100px;
+            opacity: 0.1;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .page-header h1 {
+            color: white;
+            font-size: 2em;
+            margin: 0 0 10px 0;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+        }
+
+        .period-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 15px;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Table Section */
+        .table-section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #2f5d2f;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #f0f0f0;
+        }
+
+        .section-title i {
+            font-size: 1.3em;
+            color: #4c8c2b;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            font-size: 14px;
+        }
+
+        th {
+            background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%);
+            color: white;
+            padding: 14px 12px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        th:first-child {
+            border-radius: 12px 0 0 0;
+        }
+
+        th:last-child {
+            border-radius: 0 12px 0 0;
+        }
+
+        td {
+            padding: 14px 12px;
+            border-bottom: 1px solid #f0f0f0;
+            color: #555;
+            transition: background 0.2s ease;
+        }
+
+        tbody tr {
+            transition: all 0.2s ease;
+        }
+
+        tbody tr:hover {
+            background: #f8fdf8;
+            transform: scale(1.01);
+            box-shadow: 0 2px 8px rgba(76, 175, 80, 0.1);
+        }
+
+        tbody tr:nth-child(even) {
+            background: #fafafa;
+        }
+
+        tbody tr:nth-child(even):hover {
+            background: #f8fdf8;
+        }
+
+        /* Highlight important columns */
+        td:nth-child(6) { /* Total Production */
+            font-weight: 700;
+            color: #2e7d32;
+            background: rgba(76, 175, 80, 0.05);
+        }
+
+        td:nth-child(9) { /* Total Consumption */
+            font-weight: 600;
+            color: #ff9800;
+            background: rgba(255, 152, 0, 0.05);
+        }
+
+        /* Action buttons */
+        .action-buttons {
+            display: flex;
+            gap: 6px;
+        }
+
+        .update-link,
+        .delete-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 6px 12px;
+            text-decoration: none;
+            color: #fff;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .update-link {
+            background: #66bb6a;
+        }
+
+        .update-link:hover {
+            background: #4caf50;
+            transform: translateY(-2px);
+        }
+
+        .delete-link {
+            background: #f44336;
+        }
+
+        .delete-link:hover {
+            background: #d32f2f;
+            transform: translateY(-2px);
+        }
+
+        /* Add button */
+        .add-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .add-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #4c8c2b 0%, #66bb6a 100%);
+            color: white;
+            padding: 14px 32px;
+            text-decoration: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            box-shadow: 0 4px 14px rgba(76, 140, 43, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .add-button:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(76, 140, 43, 0.4);
+        }
+
+        /* Charts Section */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .chart-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            animation: fadeInUp 1s ease;
+        }
+
+        .chart-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #2f5d2f;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #f0f0f0;
+        }
+
+        .chart-title i {
+            font-size: 1.2em;
+            color: #4c8c2b;
+        }
+
+        .chart-card img {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.3);
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        .modal-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .modal-icon {
+            width: 70px;
+            height: 70px;
+            background: #ffebee;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #f44336;
+            font-size: 36px;
+            margin: 0 auto 16px;
+        }
+
+        .modal-title {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #333;
+            margin: 0;
+        }
+
+        .modal-body {
+            margin-bottom: 28px;
+            text-align: center;
+        }
+
+        .modal-info {
+            background: #f8f9fa;
+            padding: 14px 18px;
+            border-radius: 10px;
+            margin: 16px 0;
+            font-weight: 600;
+            color: #2f5d2f;
+            font-size: 1.05em;
+        }
+
+        .modal-warning {
+            color: #999;
+            font-size: 0.9em;
+            margin-top: 12px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .modal-button {
+            flex: 1;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.95em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: "Poppins", Arial, sans-serif;
+        }
+
+        .modal-cancel {
+            background: #f5f5f5;
+            color: #666;
+        }
+
+        .modal-cancel:hover {
+            background: #e8e8e8;
+            transform: translateY(-2px);
+        }
+
+        .modal-confirm {
+            background: #f44336;
+            color: white;
+        }
+
+        .modal-confirm:hover {
+            background: #d32f2f;
+            transform: translateY(-2px);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                transform: scale(0.85) translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1) translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 1.5em;
+            }
+
+            .table-section,
+            .chart-card {
+                padding: 20px;
+            }
+
+            table {
+                font-size: 12px;
+            }
+
+            th, td {
+                padding: 10px 8px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .modal {
+                padding: 24px;
+            }
+
+            .modal-buttons {
+                flex-direction: column;
+            }
+        }
+
+        /* Empty state */
+        .no-records {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+
+        .no-records i {
+            font-size: 64px;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Milk production for the year {{selected_year}},the {{selected_month}} month </h1>
+    <div class="container">
+        <!-- Header -->
+        <div class="page-header">
+            <h1>Milk Production Analytics</h1>
+            <div class="period-badge">
+                <i class='bx bx-calendar'></i>Month
+                {{ selected_month }}-{{ selected_year }}
+            </div>
+        </div>
+
+        <!-- Data Table -->
+        <div class="table-section">
+            <div class="section-title">
+                <i class='bx bx-table'></i>
+                Daily Production Records
+            </div>
+
+            {% if milk_production_records %}
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th><i class='bx bx-calendar-alt'></i> Day</th>
+                                <th><i class='bx bx-dog'></i> Animals</th>
+                                <th><i class='bx bx-sun'></i> Morning</th>
+                                <th><i class='bx bx-time'></i> Midday</th>
+                                <th><i class='bx bx-moon'></i> Evening</th>
+                                <th><i class='bx bx-droplet'></i> Total Prod.</th>
+                                <th><i class='bx bx-coffee'></i> AM Cons.</th>
+                                <th><i class='bx bx-coffee'></i> PM Cons.</th>
+                                <th><i class='bx bx-pie-chart-alt-2'></i> Total Cons.</th>
+                                <th><i class='bx bx-cog'></i> Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for record in milk_production_records %}
+                            <tr>
+                                <td><strong>{{ record.Day }}</strong></td>
+                                <td>{{ record.Livestock_number }}</td>
+                                <td>{{ record.Morning_production }} L</td>
+                                <td>{{ record.Midday_production }} L</td>
+                                <td>{{ record.Evening_production }} L</td>
+                                <td>{{ record.Total_production }} L</td>
+                                <td>{{ record.Morning_consumption }} L</td>
+                                <td>{{ record.Evening_consumption }} L</td>
+                                <td>{{ record.Total_consumption }} L</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <a href="{% url 'homepage:update-milkproductionbymonth' selected_year=selected_year selected_month=selected_month Day=record.Day %}" class="update-link">
+                                            <i class='bx bx-edit-alt'></i> Update
+                                        </a>
+                                        <a href="#" class="delete-link" onclick="showDeleteModal(event, '{{ record.Day }}', '{{ selected_year }}', '{{ selected_month }}')">
+                                            <i class='bx bx-trash'></i> Delete
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="add-container">
+                    <a href="{% url 'homepage:add-milkproductionbymonth' selected_year=selected_year selected_month=selected_month %}" class="add-button">
+                        <i class='bx bx-plus'></i> Add Production Record
+                    </a>
+                </div>
+            {% else %}
+                <div class="no-records">
+                    <i class='bx bx-data'></i>
+                    <p>No production records found for this period.</p>
+                    <a href="{% url 'homepage:add-milkproductionbymonth' selected_year=selected_year selected_month=selected_month %}" class="add-button" style="margin-top: 20px;">
+                        <i class='bx bx-plus'></i> Add First Record
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Charts -->
+        {% if milk_production_records %}
+        <div class="charts-grid">
+            <div class="chart-card">
+                <div class="chart-title">
+                    <i class='bx bx-line-chart'></i>
+                    Milk Production vs Day
+                </div>
+                <img src="data:image/png;base64,{{ image_base64_production }}" alt="Milk Production vs Day">
+            </div>
+
+            <div class="chart-card">
+                <div class="chart-title">
+                    <i class='bx bx-bar-chart-alt-2'></i>
+                    Total Consumption vs Day
+                </div>
+                <img src="data:image/png;base64,{{ image_base64_consumption }}" alt="Total Consumption vs Day">
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-icon">
+                    <i class='bx bx-trash'></i>
+                </div>
+                <h2 class="modal-title">Delete Record?</h2>
+            </div>
+            <div class="modal-body">
+                <div class="modal-info" id="recordInfo"></div>
+                <p class="modal-warning">This action cannot be undone</p>
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-button modal-cancel" onclick="closeDeleteModal()">
+                    Cancel
+                </button>
+                <button class="modal-button modal-confirm" onclick="confirmDelete()">
+                    Delete
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let deleteUrl = '';
 
 
+        function showDeleteModal(event, day, year, month) {
+            event.preventDefault();
+            const link = event.target.closest('a');
+            deleteUrl = '/Delete_milkproductionbymonth/' + day+ '/' +year+ '/'+month+'/';
 
-    <table>
-        <thead>
-            <tr>
+            document.getElementById('recordInfo').innerHTML =
+                `Day <strong>${day}</strong> - ${month} ${year}`;
+            document.getElementById('deleteModal').classList.add('active');
+        }
 
-              <th>Day</th>
-              <th>Number of Animals</th>
-              <th>Morning Production</th>
-              <th>Midday Production</th>
-              <th>Evening Production</th>
-              <th>Total Production</th>
-              <th>Morning Consumption</th>
-              <th>Evening Consumption</th>
-              <th>Total Consumption</th>
-              <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for record in milk_production_records %}
-            <tr>
-              <td>{{ record.Day }}</td>
-              <td>{{ record.Livestock_number }}</td>
-              <td>{{ record.Morning_production }}</td>
-              <td>{{ record.Midday_production }}</td>
-              <td>{{ record.Evening_production }}</td>
-              <td>{{ record.Total_production}}</td>
-              <td>{{ record.Morning_consumption}}</td>
-              <td>{{ record.Evening_consumption}}</td>
-              <td>{{ record.Total_consumption}}</td>
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').classList.remove('active');
+            deleteUrl = '';
+        }
 
-                <td>
-                <a href="{% url 'homepage:update-milkproductionbymonth' selected_year=selected_year selected_month=selected_month Day=record.Day%}" class="update-link">update</a>
-                <a href="{% url 'homepage:delete-milkproductionbymonth' selected_year=selected_year selected_month=selected_month Day=record.Day%}"class="delete-link">Delete</a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <a href="{% url 'homepage:add-milkproductionbymonth' selected_year=selected_year selected_month=selected_month %}" class="add-button">Add</a>
-    
-    <div>
-      <h3>Milk Production vs Day</h3>
-      <img src="data:image/png;base64,{{ image_base64_production }}" alt="Milk Production vs Day">
-  </div>
+        function confirmDelete() {
+            if (deleteUrl) {
+                window.location.href = deleteUrl;
+            }
+        }
 
-  <div>
-    <h3>Total Consumption vs Day</h3>
-    <img src="data:image/png;base64,{{ image_base64_consumption }}" alt="Total Consumption vs Day">
-</div>
+        // Close modal when clicking outside
+        document.getElementById('deleteModal').addEventListener('click', function(event) {
+            if (event.target === this) {
+                closeDeleteModal();
+            }
+        });
 
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeDeleteModal();
+            }
+        });
+    </script>
 </body>
-{%endblock%}
+{% endblock %}

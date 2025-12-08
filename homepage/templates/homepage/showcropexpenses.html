@@ -588,7 +588,7 @@
 
     function showDeleteModal(event, expenseDate, expenseType, amount) {
       event.preventDefault();
-      deleteUrl = event.target.closest('a').href;
+      deleteUrl = '/deleteCrop_expenses/' + expenseDate + '/' + expenseType + '/';
 
       document.getElementById('expenseInfo').innerHTML =
         `<strong>${expenseType}</strong><br>KSh ${parseFloat(amount).toFixed(2)}<br><small>${expenseDate}</small>`;

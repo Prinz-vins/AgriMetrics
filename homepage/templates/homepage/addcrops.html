@@ -1,74 +1,353 @@
 {% extends 'homepage/base.html' %}
 
-
 {% block content %}
 <head>
     <title>Add Crops</title>
-    {%load static%}  
+    {% load static %}
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
 
     <style>
-
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
+            font-family: "Poppins", Arial, sans-serif;
+            background: linear-gradient(135deg, #e8f3e4 0%, #f6faf4 100%);
             margin: 0;
+            padding: 30px 20px;
+            animation: fadeIn 0.6s ease;
+            min-height: 100vh;
         }
-        
-        h1 {
+
+        .form-container {
+            max-width: 650px;
+            margin: 0 auto;
+            animation: slideUp 0.7s ease;
+        }
+
+        .form-header {
             text-align: center;
-            color: #333;
+            margin-bottom: 30px;
         }
-        
+
+        .form-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #4c8c2b 0%, #66bb6a 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 36px;
+            margin: 0 auto 20px;
+            box-shadow: 0 8px 20px rgba(76, 140, 43, 0.3);
+        }
+
+        h1 {
+            color: #2f5d2f;
+            font-weight: 600;
+            margin: 0;
+            font-size: 2em;
+        }
+
+        .form-subtitle {
+            color: #666;
+            font-size: 14px;
+            margin-top: 8px;
+        }
+
         form {
-            background-color: #fff;
-            border: 1px solid #ccc;
-            padding: 20px;
-            margin-top: 20px;
-            max-width: 500px;
-            margin-left: auto;
-            margin-right: auto;
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
         }
-        
+
+        .info-card {
+            background: linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 100%);
+            border-left: 4px solid #4c8c2b;
+            padding: 16px 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: start;
+            gap: 12px;
+        }
+
+        .info-card i {
+            font-size: 24px;
+            color: #4c8c2b;
+            margin-top: 2px;
+        }
+
+        .info-content p {
+            margin: 0;
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        form p {
+            margin: 0 0 24px 0;
+        }
+
         label {
             display: block;
-            margin-bottom: 10px;
-            font-weight: bold;
+            margin-bottom: 8px;
+            font-weight: 600;
             color: #333;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-        
+
         input[type="text"],
         input[type="date"],
-        input[type="number"] {
+        input[type="number"],
+        select,
+        textarea {
             width: 100%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
             box-sizing: border-box;
-            margin-bottom: 15px;
+            font-size: 14px;
+            font-family: "Poppins", Arial, sans-serif;
+            transition: all 0.3s ease;
+            background: #fafafa;
         }
-        
-        input[type="submit"] {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
+
+        input[type="text"]:focus,
+        input[type="date"]:focus,
+        input[type="number"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #4c8c2b;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(76, 140, 43, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        select {
             cursor: pointer;
-            font-size: 16px;
-            margin-top: 10px;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%234c8c2b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 20px;
+            padding-right: 45px;
         }
-        
+
+        .errorlist {
+            color: #d32f2f;
+            list-style: none;
+            padding: 0;
+            margin: 8px 0 0 0;
+        }
+
+        .errorlist li {
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 4px;
+        }
+
+        .errorlist li::before {
+            content: "⚠";
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        input[type="submit"],
+        .btn {
+            flex: 1;
+            padding: 14px 28px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            font-family: "Poppins", Arial, sans-serif;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        input[type="submit"] {
+            background: linear-gradient(135deg, #4c8c2b 0%, #66bb6a 100%);
+            color: white;
+            box-shadow: 0 4px 14px rgba(76, 140, 43, 0.3);
+        }
+
         input[type="submit"]:hover {
-            background-color: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(76, 140, 43, 0.4);
+        }
+
+        input[type="submit"]:active {
+            transform: translateY(0);
+        }
+
+        .btn-cancel {
+            background: #f5f5f5;
+            color: #666;
+            border: 2px solid #ddd;
+        }
+
+        .btn-cancel:hover {
+            background: #e8e8e8;
+            transform: translateY(-2px);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            form {
+                padding: 28px 20px;
+            }
+
+            h1 {
+                font-size: 1.6em;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .form-icon {
+                width: 70px;
+                height: 70px;
+                font-size: 32px;
+            }
         }
     </style>
 </head>
 <body>
-    <h1>Add Crops</h1>
-    <form method="POST" action="{% url 'homepage:add-crops' %}">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Add">
-    </form>
+    <div class="form-container">
+        <div class="form-header">
+            <div class="form-icon">
+                <i class='bx bxs-leaf'></i>
+            </div>
+            <h1>Add New Crop</h1>
+            <p class="form-subtitle">Register a new crop in your farm</p>
+        </div>
+
+        <form method="POST" action="{% url 'homepage:add-crops' %}">
+            {% csrf_token %}
+
+            <div class="info-card">
+                <i class='bx bx-info-circle'></i>
+                <div class="info-content">
+                    <p>Fill in the details below to add a new crop to your farm records.</p>
+                </div>
+            </div>
+
+            {{ form.as_p }}
+
+            <div class="form-actions">
+                <a href="javascript:history.back()" class="btn btn-cancel">
+                    <i class='bx bx-x'></i> Cancel
+                </a>
+                <input type="submit" value="✓ Add Crop">
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Add icons to form labels dynamically
+        document.addEventListener('DOMContentLoaded', function() {
+            const labels = document.querySelectorAll('form p label');
+
+            labels.forEach(label => {
+                const labelText = label.textContent.toLowerCase();
+                let icon = 'bx-pencil';
+
+                // Assign icons based on field name
+                if (labelText.includes('id') || labelText.includes('cid')) {
+                    icon = 'bx-hash';
+                } else if (labelText.includes('field name')) {
+                    icon = 'bx-map';
+                } else if (labelText.includes('description')) {
+                    icon = 'bx-detail';
+                } else if (labelText.includes('crop name')) {
+                    icon = 'bxs-leaf';
+                } else if (labelText.includes('variety')) {
+                    icon = 'bx-dna';
+                } else if (labelText.includes('planting')) {
+                    icon = 'bx-calendar-plus';
+                } else if (labelText.includes('harvest')) {
+                    icon = 'bx-calendar-check';
+                } else if (labelText.includes('check') || labelText.includes('harvested')) {
+                    icon = 'bx-check-circle';
+                }
+
+                // Create icon element
+                const iconElement = document.createElement('i');
+                iconElement.className = `bx ${icon}`;
+                iconElement.style.color = '#4c8c2b';
+                iconElement.style.fontSize = '16px';
+                label.insertBefore(iconElement, label.firstChild);
+            });
+
+            // Mark required fields
+            document.querySelectorAll('input[required], select[required], textarea[required]').forEach(field => {
+                const label = field.parentElement.querySelector('label');
+                if (label) {
+                    const asterisk = document.createElement('span');
+                    asterisk.textContent = ' *';
+                    asterisk.style.color = '#d32f2f';
+                    label.appendChild(asterisk);
+                }
+            });
+
+            // Auto-capitalize crop name and variety
+            function capitalizeWords(input) {
+                input.addEventListener('blur', function() {
+                    if (this.value) {
+                        this.value = this.value
+                            .split(' ')
+                            .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+                            .join(' ');
+                    }
+                });
+            }
+
+            // Apply to text inputs that might contain names
+            document.querySelectorAll('input[type="text"]').forEach(input => {
+                const name = input.name.toLowerCase();
+                if (name.includes('crop') || name.includes('variety') || name.includes('field')) {
+                    capitalizeWords(input);
+                }
+            });
+        });
+    </script>
 </body>
-{%endblock%}
+{% endblock %}

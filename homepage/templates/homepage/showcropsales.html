@@ -666,7 +666,7 @@
 
     function showDeleteModal(event, saleDate, invoiceNumber, totalPrice) {
       event.preventDefault();
-      deleteUrl = event.target.closest('a').href;
+      deleteUrl = '/delete_cropsales/' + saleDate + '/' + invoiceNumber + '/';
 
       document.getElementById('saleInfo').innerHTML =
         `<strong>Invoice ${invoiceNumber}</strong><br>KSh ${parseFloat(totalPrice).toFixed(2)}<br><small>${saleDate}</small>`;

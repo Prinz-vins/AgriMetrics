@@ -3,73 +3,429 @@
 {% block content %}
 <head>
     <title>add production</title>
-    {%load static%}  
+    {%load static%}
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
-            margin: 0;
+            font-family: "Poppins", Arial, sans-serif;
+            background: linear-gradient(135deg, #e8f3e4 0%, #f6faf4 100%);
+            min-height: 100vh;
+            padding: 50px 20px;
+            animation: fadeIn 0.6s ease;
         }
-        
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .form-container {
+            background: white;
+            border-radius: 20px;
+            padding: 0;
+            margin: 0 auto;
+            max-width: 620px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            position: relative;
+            animation: slideUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            overflow: hidden;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Top accent bar */
+        .form-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: linear-gradient(90deg, #4c8c2b 0%, #66bb6a 100%);
+            border-radius: 20px 20px 0 0;
+        }
+
+        /* Decorative element */
+        .form-container::after {
+            content: '🥚';
+            position: absolute;
+            top: 25px;
+            right: 30px;
+            font-size: 45px;
+            opacity: 0.08;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(-5deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+        }
+
+        .form-content {
+            padding: 45px 40px;
+        }
+
         h1 {
             text-align: center;
-            color: black;
+            color: #2f5d2f;
+            font-size: 1.8em;
+            font-weight: 600;
+            margin-bottom: 35px;
+            line-height: 1.4;
+            animation: titleSlide 0.7s ease;
         }
 
+        @keyframes titleSlide {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-        
+        .year-month-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            color: #2f5d2f;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            margin: 0 4px;
+            box-shadow: 0 2px 8px rgba(76, 140, 43, 0.15);
+        }
+
         form {
-            background-color: #fff;
-            border: 1px solid #ccc;
-            padding: 20px;
-            margin-top: 20px;
-            max-width: 500px;
-            margin-left: auto;
-            margin-right: auto;
+            position: relative;
         }
-        
+
+        /* Form field styling */
+        form p {
+            margin-bottom: 26px;
+            position: relative;
+            animation: fieldFadeIn 0.6s ease backwards;
+        }
+
+        form p:nth-child(1) { animation-delay: 0.1s; }
+        form p:nth-child(2) { animation-delay: 0.15s; }
+        form p:nth-child(3) { animation-delay: 0.2s; }
+        form p:nth-child(4) { animation-delay: 0.25s; }
+        form p:nth-child(5) { animation-delay: 0.3s; }
+
+        @keyframes fieldFadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(-15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
         label {
             display: block;
             margin-bottom: 10px;
-            font-weight: bold;
-            color: #333;
+            font-weight: 600;
+            font-size: 0.95em;
+            color: #2f5d2f;
+            transition: color 0.3s ease;
         }
-        
+
+        /* Focus highlight for parent container */
+        form p:focus-within label {
+            color: #4c8c2b;
+        }
+
         input[type="text"],
         input[type="date"],
-        input[type="number"] {
+        input[type="number"],
+        input[type="email"],
+        select,
+        textarea {
             width: 100%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-            margin-bottom: 15px;
+            padding: 14px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 15px;
+            font-family: "Poppins", Arial, sans-serif;
+            transition: all 0.3s ease;
+            background: #fafafa;
+            color: #333;
         }
-        
-        input[type="submit"] {
-            background-color: #4CAF50;
+
+        input[type="text"]:focus,
+        input[type="date"]:focus,
+        input[type="number"]:focus,
+        input[type="email"]:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #4c8c2b;
+            background: white;
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(76, 140, 43, 0.1);
+            transform: translateY(-2px);
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: #999;
+        }
+
+        /* Select dropdown styling */
+        select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14'%3E%3Cpath fill='%234c8c2b' d='M7 10L2 5h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            padding-right: 45px;
+        }
+
+        /* Textarea styling */
+        textarea {
+            min-height: 110px;
+            resize: vertical;
+        }
+
+        /* Submit button */
+        button[type="submit"] {
+            width: 100%;
+            background: linear-gradient(135deg, #4c8c2b 0%, #66bb6a 100%);
             color: white;
-            padding: 10px 20px;
+            padding: 16px;
             border: none;
-            border-radius: 4px;
+            border-radius: 12px;
             cursor: pointer;
             font-size: 16px;
-            margin-top: 10px;
+            font-weight: 600;
+            font-family: "Poppins", Arial, sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(76, 140, 43, 0.3);
+            animation: buttonAppear 0.6s ease 0.35s backwards;
+            position: relative;
+            overflow: hidden;
         }
-        
-        input[type="submit"]:hover {
-            background-color: #45a049;
+
+        @keyframes buttonAppear {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Button shine effect */
+        button[type="submit"]::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        button[type="submit"]:hover::before {
+            left: 100%;
+        }
+
+        button[type="submit"]:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(76, 140, 43, 0.4);
+            background: linear-gradient(135deg, #3a6f23 0%, #4c8c2b 100%);
+        }
+
+        button[type="submit"]:active {
+            transform: translateY(-1px);
+        }
+
+        /* Help text styling */
+        .helptext {
+            display: block;
+            font-size: 0.85em;
+            color: #666;
+            margin-top: 6px;
+            font-style: italic;
+            line-height: 1.4;
+        }
+
+        /* Error message styling */
+        .errorlist {
+            list-style: none;
+            padding: 12px 16px;
+            background: #fee;
+            color: #d64545;
+            border-left: 4px solid #d64545;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            font-size: 0.9em;
+            animation: errorShake 0.5s ease;
+        }
+
+        @keyframes errorShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
+        }
+
+        .errorlist li {
+            margin: 0;
+            font-weight: 500;
+        }
+
+        /* Required field indicator */
+        .required label::after {
+            content: ' *';
+            color: #d64545;
+            font-weight: bold;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            body {
+                padding: 30px 15px;
+            }
+
+            .form-content {
+                padding: 35px 25px;
+            }
+
+            h1 {
+                font-size: 1.5em;
+                margin-bottom: 30px;
+            }
+
+            input[type="text"],
+            input[type="date"],
+            input[type="number"],
+            input[type="email"],
+            select,
+            textarea {
+                padding: 12px 14px;
+                font-size: 14px;
+            }
+
+            button[type="submit"] {
+                padding: 14px;
+                font-size: 15px;
+            }
+
+            .year-month-badge {
+                display: block;
+                margin: 8px 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .form-content {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 1.3em;
+            }
         }
     </style>
 </head>
 <body>
-  <h1>Add Milk Production for the month {{ selected_month }}  and the Year {{ selected_year }}</h1>
-  
-  <form method="post" action="">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Add Production</button>
-  </form>
+    <div class="form-container">
+        <div class="form-content">
+            <h1>
+                Add Egg Production for the
+                <span class="year-month-badge">Year {{ selected_year }}</span>
+                <span class="year-month-badge month-badge">Month {{ selected_month }}</span>
+            </h1>
+
+            <form method="post" action="">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Add Production</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Convert month number to name
+        function getMonthName(monthNumber) {
+            const months = {
+                '01': 'January', '1': 'January',
+                '02': 'February', '2': 'February',
+                '03': 'March', '3': 'March',
+                '04': 'April', '4': 'April',
+                '05': 'May', '5': 'May',
+                '06': 'June', '6': 'June',
+                '07': 'July', '7': 'July',
+                '08': 'August', '8': 'August',
+                '09': 'September', '9': 'September',
+                '10': 'October',
+                '11': 'November',
+                '12': 'December'
+            };
+            return months[String(monthNumber).trim()] || monthNumber;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Convert month number to month name
+            const monthBadge = document.querySelector('.month-badge');
+            if (monthBadge) {
+                const text = monthBadge.textContent;
+                const monthNumber = text.replace('Month', '').trim();
+                const monthName = getMonthName(monthNumber);
+                monthBadge.textContent = monthName;
+            }
+
+            // Add icons to labels
+            const labels = document.querySelectorAll('label');
+            labels.forEach(label => {
+                const text = label.textContent.toLowerCase();
+                let icon = '';
+
+                if (text.includes('date') || text.includes('day')) {
+                    icon = '<i class="bx bx-calendar" style="margin-right: 6px;"></i>';
+                } else if (text.includes('egg') || text.includes('production') || text.includes('quantity')) {
+                    icon = '<i class="bx bx-package" style="margin-right: 6px;"></i>';
+                } else if (text.includes('hen') || text.includes('chicken') || text.includes('bird')) {
+                    icon = '<i class="bx bx-pulse" style="margin-right: 6px;"></i>';
+                } else if (text.includes('feed') || text.includes('consumed')) {
+                    icon = '<i class="bx bx-food-menu" style="margin-right: 6px;"></i>';
+                } else if (text.includes('comment') || text.includes('note') || text.includes('description')) {
+                    icon = '<i class="bx bx-comment-detail" style="margin-right: 6px;"></i>';
+                } else if (text.includes('weight')) {
+                    icon = '<i class="bx bx-trending-up" style="margin-right: 6px;"></i>';
+                } else {
+                    icon = '<i class="bx bx-edit" style="margin-right: 6px;"></i>';
+                }
+
+                label.innerHTML = icon + label.textContent;
+            });
+        });
+    </script>
 </body>
 {% endblock %}

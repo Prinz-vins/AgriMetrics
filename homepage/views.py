@@ -54,7 +54,7 @@ def Update_employees(request, Eid):
         form.save()
         return redirect("homepage:show-employees")
 
-    return render(request, "homepage/updateemployees.html", {"employees": employees})
+    return render(request, "homepage/updateemployees.html", {"employees": employees,"form":form})
 
 
 # views for crops
@@ -97,12 +97,12 @@ def Update_crops(request, Cid):
     return render(request, "homepage/updatecrops.html", {"crops": crops})
 
 def Delete_crops (request,Cid):
-    crops=Crops.objects.get(Cid=Cid)
-    if request.method =="POST":
+        crops=Crops.objects.get(Cid=Cid)
+
         crops.delete()
         return redirect("homepage:show-crops")
     
-    return render(request,'homepage/deletecrops.html', {'crops':crops})
+
 
 def Show_crop_expenses(request,Cid):
     crops=get_object_or_404(Crops,Cid=Cid)
@@ -139,13 +139,13 @@ def Update_crop_expenses(request,Cid,Expense_date):
 
     return render(request,'homepage/updatecropexpenses.html',{'crops':crops,'crop_expenses':crop_expenses})
 
-def Delete_crop_expenses(request,Cid,Expense_date):
-    crop_expenses=get_object_or_404(Crop_expenses, crops__Cid=Cid,Expense_date=Expense_date)
-    if request.method=="POST":
+def deleteCrop_expenses(request,Cid,Expense_date):
+        crop_expenses=get_object_or_404(Crop_expenses, crops__Cid=Cid,Expense_date=Expense_date)
+
         Crop_expenses.delete()
         return redirect('homepage:show-cropexpenses ',Cid=crop_expenses.crops.Cid)
     
-    return render(request,'homepage/deletecropexpenses.html',{'crop_expenses':crop_expenses})
+
     
 
 def Show_crop_sales(request,Cid):
@@ -171,12 +171,12 @@ def Add_crop_sales(request,Cid):
     
 
 def Delete_crop_sales(request,Cid,Sale_date):
-    crop_sales=get_object_or_404(Crop_sales,crops__Cid=Cid,Sale_date=Sale_date)
+        crop_sales=get_object_or_404(Crop_sales,crops__Cid=Cid,Sale_date=Sale_date)
 
-    if request.method=='POST':
+
         crop_sales.delete()
         return redirect('homepage:show-cropsales', Cid=crop_sales.crops.Cid)
-    return render(request,'homepage/deletecropsales.html',{'crop_sales':crop_sales})
+
 
 def Update_crop_sales(request,Cid,Sale_date):
     crops= get_object_or_404(Crops,Cid=Cid)
@@ -214,12 +214,12 @@ def Add_crop_operations(request,Cid):
         return render(request, 'homepage/addcropoperations.html',{'form':form,'crops':crops})
 
 def Delete_crop_operations(request,Cid,Operation_date):
-    crop_operations=get_object_or_404(Crop_operations,crops__Cid=Cid,Operation_date=Operation_date)
-    if request.method=='POST':
+        crop_operations=get_object_or_404(Crop_operations,crops__Cid=Cid,Operation_date=Operation_date)
+
         crop_operations.delete()
         return redirect('homepage:show-cropoperations',Cid=crop_operations.crops.Cid)
     
-    return render(request, 'homepage/deletecropoperations.html',{'crop_operations':crop_operations})
+
 
 
 def Update_crop_operations(request,Cid,Operation_date):
@@ -264,12 +264,12 @@ def Add_machinery(request):
 
 
 def Delete_machinery(request,Number_plate):
-    machinery=Machinery.objects.get(Number_plate=Number_plate)
-    if request.method=="POST":
+        machinery=Machinery.objects.get(Number_plate=Number_plate)
+
         machinery.delete()
         return redirect("homepage:show-machinery")
         
-    return render(request,"homepage/deletemachinery.html", {"machinery":machinery})
+
 
 
 def Update_machinery(request,Number_plate):
@@ -308,12 +308,12 @@ def Add_machinery_activities(request,Number_plate):
     return render(request, 'homepage/addmachineryactivities.html',{'machinery':machinery,'form':form})
 
 def Delete_machinery_activity(request,Number_plate,Activity_date):
-    machinery_activities=get_object_or_404(Machinery_activities,machinery__Number_plate=Number_plate,Activity_date=Activity_date)
-    if request.method=='POST':
+        machinery_activities=get_object_or_404(Machinery_activities,machinery__Number_plate=Number_plate,Activity_date=Activity_date)
+
         machinery_activities.delete()
         return redirect('homepage:show-machineryactivities',Number_plate=machinery_activities.machinery.Number_plate)
     
-    return render(request,'homepage/deletemachineryactivities.html',{'machinery_activities':machinery_activities})
+
 
 
 def Update_machinery_activities(request,Number_plate,Activity_date):
@@ -348,12 +348,12 @@ def Add_machinery_maintenance(request,Number_plate):
     return render(request, 'homepage/addmachinerymaintenance.html',{'machinery':machinery,'form':form})
 
 def Delete_machinery_maintenance(request,Number_plate,Date):
-    machinery_maintenance=get_object_or_404(Machinery_maintenance,machinery__Number_plate=Number_plate,Date=Date)
-    if request.method=='POST':
+        machinery_maintenance=get_object_or_404(Machinery_maintenance,machinery__Number_plate=Number_plate,Date=Date)
+
         machinery_maintenance.delete()
         return redirect('homepage:show-machinerymaintenance',Number_plate=machinery_maintenance.machinery.Number_plate)
     
-    return render(request,'homepage/deletemachinerymaintenance.html',{'machinery_maintenance':machinery_maintenance})
+
 
 
 def Update_machinery_maintenance(request,Number_plate,Date):
@@ -409,7 +409,7 @@ def Update_livestock(request,Tag_number):
 
     return render(request,"homepage/updatelivestock.html",{'livestock':livestock})
 
-def Delete_livestock(request,Tag_number):
+def deleteLivestock(request,Tag_number):
          livestock=Livestock.objects.get(Tag_number=Tag_number)
          livestock.delete()
          return redirect("homepage:show-livestock")
@@ -439,13 +439,13 @@ def Add_livestock_production(request, Tag_number):
         return render(request, 'homepage/addlivestockproduction.html', {'form': form, 'livestock': livestock})
     
 
-def Delete_livestock_production(request,Tag_number,Production_date):
-    livestock_production = get_object_or_404(Livestock_production,livestock__Tag_number=Tag_number,Production_date=Production_date)
-    if request.method=="POST":
+def deleteLivestock_production(request,Tag_number,Production_date):
+        livestock_production = get_object_or_404(Livestock_production,livestock__Tag_number=Tag_number,Production_date=Production_date)
+
         livestock_production.delete()
         return redirect("homepage:show-livestockproduction",  Tag_number=livestock_production.livestock.Tag_number)
     
-    return render(request, 'homepage/deletelivestockproduction.html',{'livestock_production':livestock_production})
+
 
 def Update_livestock_production(request,Tag_number,Production_date):
     livestock=get_object_or_404(Livestock,Tag_number=Tag_number)
@@ -564,7 +564,7 @@ def Add_milk_production_by_month(request, selected_year, selected_month):
 
 
 def Delete_milk_production_by_month(request,selected_year,selected_month,Day):
-        milk_production_records=get_object_or_404(Milk_production,Day=Day)
+        milk_production_records=get_object_or_404(Milk_production,Year=selected_year,Month=selected_month,Day=Day)
         milk_production_records.delete()
         return redirect('homepage:milk-productionbymonth', selected_year=selected_year,selected_month=selected_month)
     
@@ -613,11 +613,11 @@ def Add_egg_production_by_month(request,selected_year,selected_month):
     return render(request, 'homepage/addeggproduction.html', {'form':form,'selected_year':selected_year,'selected_month':selected_month})
 
 def Delete_egg_production_by_month(request,selected_year,selected_month,Day):
-    egg_production_records=get_object_or_404(Eggs_production,Day=Day)
-    if request.method=='POST':
+        egg_production_records=get_object_or_404(Eggs_production,Day=Day)
+
         egg_production_records.delete()
         return redirect('homepage:egg-productionrecord', selected_year=selected_year,selected_month=selected_month)
-    return render(request, 'homepage/deleteeggproduction.html', {'egg_production_records':egg_production_records,'selected_year':selected_year,'selected_month':selected_month})
+
 
 def Update_egg_production_by_month(request,selected_year,selected_month,Day):
     egg_production_record=get_object_or_404(Eggs_production,Day=Day,Year=selected_year,Month=selected_month)

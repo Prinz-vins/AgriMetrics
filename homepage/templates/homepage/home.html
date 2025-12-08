@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Farm Manager - Dashboard</title>
+    <title>AgriMetrics- Dashboard</title>
     <link
       rel="stylesheet"
       href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
@@ -692,13 +692,7 @@
           </a>
           <span class="tooltip">Help</span>
         </li>
-        <li>
-          <a href="#">
-            <i class="bx bx-cog"></i>
-            <span class="links_name">Settings</span>
-          </a>
-          <span class="tooltip">Settings</span>
-        </li>
+
       </ul>
     </div>
 
@@ -706,7 +700,7 @@
       <div class="content-wrapper">
         <div class="text">
           <div class="welcome-message">
-            <h1 id="greeting">Good Evening {{user.username}}, let's monitor your activities!</h1>
+            <h1 id="greeting">Good Evening {{user.username}}, let's monitor your Farm!</h1>
           </div>
           <script>
             var today = new Date();
@@ -721,7 +715,7 @@
               greeting.innerHTML = "Good Evening {{user.username}}, let's monitor your activities! ";
             }
           </script>
-          <p>Welcome to your comprehensive farm management dashboard. Monitor, analyze, and optimize your agricultural operations all in one place.</p>
+          <p>Welcome to AgriMetrics your comprehensive farm management tool. Monitor, analyze, and optimize your agricultural operations all in one place.</p>
         </div>
 
         <div class="card-container">
