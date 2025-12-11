@@ -541,7 +541,7 @@
             <a href="{% url 'homepage:update-cropexpenses' Cid=crops.Cid Expense_date=expense.Expense_date|date:'Y-m-d' %}" class="action-button action-update">
               <i class='bx bx-edit-alt'></i> Update
             </a>
-            <a href="#" class="action-button action-delete" onclick="showDeleteModal(event, '{{ expense.Expense_date|date:'Y-m-d' }}', '{{ expense.Expense_type }}', '{{ expense.Expense_amount }}')">
+            <a href="#" class="action-button action-delete" onclick="showDeleteModal(event, '{{ crops.Cid }}', '{{ expense.Expense_date|date:'Y-m-d' }}', '{{ expense.Expense_type }}', '{{ expense.Expense_amount }}')">
               <i class='bx bx-trash'></i> Delete
             </a>
           </div>
@@ -586,12 +586,12 @@
   <script>
     let deleteUrl = '';
 
-    function showDeleteModal(event, expenseDate, expenseType, amount) {
+    function showDeleteModal(event, Cid, expenseDate, expenseType, amount) {
       event.preventDefault();
-      deleteUrl = '/deleteCrop_expenses/' + expenseDate + '/' + expenseType + '/';
+      deleteUrl = '/delete_cropexpenses/' + Cid + '/' + expenseDate + '/';
 
       document.getElementById('expenseInfo').innerHTML =
-        `<strong>${expenseType}</strong><br>KSh ${parseFloat(amount).toFixed(2)}<br><small>${expenseDate}</small>`;
+        '<strong>' + expenseType + '</strong><br>KSh ' + parseFloat(amount).toFixed(2) + '<br><small>' + expenseDate + '</small>';
       document.getElementById('deleteModal').classList.add('active');
     }
 

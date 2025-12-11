@@ -364,7 +364,7 @@
             <a href="{%url 'homepage:update-machinerymaintenance' Number_plate=machinery.Number_plate Date=maintenance.Date|date:'Y-m-d' %}" class="update-link">
               <i class='bx bx-edit-alt'></i> Update
             </a>
-            <a href="#" class="delete-link" onclick="showDeleteModal(event, '{{ maintenance.Date }}', '{{ maintenance.Machinery_part }}')">
+            <a href="#" class="delete-link" onclick="showDeleteModal(event,'{{ machinery.Number_plate }}', '{{ maintenance.Date|date:"Y-m-d" }}', '{{ maintenance.Machinery_part }}')">
               <i class='bx bx-trash'></i> Delete
             </a>
           </td>
@@ -408,9 +408,9 @@
   <script>
     let deleteUrl = '';
 
-    function showDeleteModal(event, maintenanceDate, machineryPart) {
+    function showDeleteModal(event,numberPlate, maintenanceDate, machineryPart) {
       event.preventDefault();
-      deleteUrl = event.target.closest('a').href;
+      deleteUrl = '/delete_machinerymaintenance/'+numberPlate+'/'+maintenanceDate+'/'+machineryPart+'/';
 
       document.getElementById('maintenanceInfo').textContent = machineryPart + ' - ' + maintenanceDate;
       document.getElementById('deleteModal').classList.add('active');

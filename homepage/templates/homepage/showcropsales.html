@@ -619,7 +619,7 @@
             <a href="{% url 'homepage:update-cropsales' Cid=crops.Cid Sale_date=sale.Sale_date|date:'Y-m-d' %}" class="action-button action-update">
               <i class='bx bx-edit-alt'></i> Update
             </a>
-            <a href="#" class="action-button action-delete" onclick="showDeleteModal(event, '{{ sale.Sale_date|date:'Y-m-d' }}', '{{ sale.Invoice_number }}', '{{ sale.Total_price }}')">
+            <a href="#" class="action-button action-delete" onclick="showDeleteModal(event, '{{ crops.Cid }}', '{{ sale.Sale_date|date:'Y-m-d' }}', '{{ sale.Invoice_number }}', '{{ sale.Total_price }}')">
               <i class='bx bx-trash'></i> Delete
             </a>
           </div>
@@ -664,12 +664,12 @@
   <script>
     let deleteUrl = '';
 
-    function showDeleteModal(event, saleDate, invoiceNumber, totalPrice) {
+    function showDeleteModal(event, Cid, saleDate, invoiceNumber, totalPrice) {
       event.preventDefault();
-      deleteUrl = '/delete_cropsales/' + saleDate + '/' + invoiceNumber + '/';
+      deleteUrl = '/delete_cropsales/' + Cid + '/' + saleDate + '/' + invoiceNumber + '/';
 
       document.getElementById('saleInfo').innerHTML =
-        `<strong>Invoice ${invoiceNumber}</strong><br>KSh ${parseFloat(totalPrice).toFixed(2)}<br><small>${saleDate}</small>`;
+        '<strong>Invoice ' + invoiceNumber + '</strong><br>KSh ' + parseFloat(totalPrice).toFixed(2) + '<br><small>' + saleDate + '</small>';
       document.getElementById('deleteModal').classList.add('active');
     }
 

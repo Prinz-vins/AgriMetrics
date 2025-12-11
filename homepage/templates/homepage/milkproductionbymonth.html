@@ -602,14 +602,12 @@
     <script>
         let deleteUrl = '';
 
-
         function showDeleteModal(event, day, year, month) {
             event.preventDefault();
-            const link = event.target.closest('a');
-            deleteUrl = '/Delete_milkproductionbymonth/' + day+ '/' +year+ '/'+month+'/';
+            deleteUrl = '/Delete_milk_production_by_month/' + year + '/' + month + '/' + day + '/';
 
             document.getElementById('recordInfo').innerHTML =
-                `Day <strong>${day}</strong> - ${month} ${year}`;
+                'Day <strong>' + day + '</strong> - ' + month + ' ' + year;
             document.getElementById('deleteModal').classList.add('active');
         }
 
@@ -624,14 +622,12 @@
             }
         }
 
-        // Close modal when clicking outside
         document.getElementById('deleteModal').addEventListener('click', function(event) {
             if (event.target === this) {
                 closeDeleteModal();
             }
         });
 
-        // Close modal with Escape key
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape') {
                 closeDeleteModal();

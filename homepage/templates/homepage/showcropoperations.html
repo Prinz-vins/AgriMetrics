@@ -445,7 +445,7 @@
               <a href="{% url 'homepage:update-cropoperations' Cid=crops.Cid Operation_date=operation.Operation_date|date:'Y-m-d' %}" class="action-button action-update">
                 <i class='bx bx-edit-alt'></i> Update
               </a>
-              <a href="#" class="action-button action-delete" onclick="showDeleteModal(event, '{{ operation.Operation_date|date:'Y-m-d' }}', '{{ operation.Operation_name }}')">
+              <a href="#" class="action-button action-delete" onclick="showDeleteModal(event, '{{ crops.Cid }}', '{{ operation.Operation_date|date:'Y-m-d' }}', '{{ operation.Operation_name }}')">
                 <i class='bx bx-trash'></i> Delete
               </a>
             </div>
@@ -491,12 +491,12 @@
   <script>
     let deleteUrl = '';
 
-    function showDeleteModal(event, operationDate, operationName) {
+    function showDeleteModal(event, Cid, operationDate, operationName) {
       event.preventDefault();
-      deleteUrl = event.target.closest('a').href;
+      deleteUrl = '/delete_cropoperations/' + Cid + '/' + operationDate + '/' + operationName + '/';
 
       document.getElementById('operationInfo').innerHTML =
-        `<strong>${operationName}</strong><br><small>${operationDate}</small>`;
+        '<strong>' + operationName + '</strong><br><small>' + operationDate + '</small>';
       document.getElementById('deleteModal').classList.add('active');
     }
 

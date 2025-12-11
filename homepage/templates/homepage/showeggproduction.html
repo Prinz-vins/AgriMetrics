@@ -438,7 +438,7 @@
                         <a href="{% url 'homepage:update-eggproduction' selected_year=selected_year selected_month=selected_month Day=record.Day%}" class="update-link">
                             <i class='bx bx-edit-alt'></i> Update
                         </a>
-                        <a href="#" class="delete-link" onclick="showDeleteModal(event, '{{ record.Day }}')">
+                        <a href="#" class="delete-link" onclick="showDeleteModal(event, '{{ record.Day }}','{{ selected_month }}','{{ selected_year }}')">
                             <i class='bx bx-trash'></i> Delete
                         </a>
                     </td>
@@ -511,9 +511,9 @@
             }
         });
 
-        function showDeleteModal(event, day) {
+        function showDeleteModal(event, day,month,year) {
             event.preventDefault();
-            deleteUrl = event.target.closest('a').href;
+            deleteUrl = '/delete_eggproductionbymonth/'+year+'/'+month+'/'+day+'/';
 
             document.getElementById('productionInfo').textContent = 'Day ' + day;
             document.getElementById('deleteModal').classList.add('active');

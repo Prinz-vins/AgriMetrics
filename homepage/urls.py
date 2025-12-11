@@ -52,13 +52,13 @@ urlpatterns = [
 
     path('update_cropexpense/<int:Cid>/<slug:Expense_date>/', Update_crop_expenses, name='update-cropexpenses'),
 
-    path('deleteCrop_expenses/<int:Cid>/<slug:Expense_date>/', deleteCrop_expenses),
+    path('delete_cropexpenses/<int:Cid>/<slug:Expense_date>/', delete_cropexpenses),
 
     path('show_cropsales/<int:Cid>/', Show_crop_sales, name="show-cropsales"),
 
     path('add_cropsales/<int:Cid>/', Add_crop_sales, name='add-cropsales'),
 
-    path('delete_cropsales/<int:Cid>/<slug:Sale_date>/', Delete_crop_sales),
+    path('delete_cropsales/<int:Cid>/<slug:Sale_date>/<str:Invoice_number>/', Delete_crop_sales, name='delete-cropsales'),
 
     path('update_cropsales/<int:Cid>/<slug:Sale_date>/', Update_crop_sales, name='update-cropsales'),
 
@@ -66,7 +66,7 @@ urlpatterns = [
 
     path('add_cropoperations/<int:Cid>/', Add_crop_operations, name='add-cropoperations'),
 
-    path('delete_cropoperations/<int:Cid>/<slug:Operation_date>/', Delete_crop_operations),
+    path('delete_cropoperations/<int:Cid>/<slug:Operation_date>/<str:Operation_name>/', Delete_crop_operations),
 
     path('update_cropoperations/<int:Cid>/<slug:Operation_date>/', Update_crop_operations, name='update-cropoperations'),
 
@@ -74,7 +74,7 @@ urlpatterns = [
 
     path('add_machineryactivirties/<str:Number_plate>/', Add_machinery_activities, name="add-machineryactivities"),
 
-    path('delete_machineryactivities/<str:Number_plate>/<slug:Activity_date>/', Delete_machinery_activity),
+    path('Delete_machineryactivities/<str:Number_plate>/<slug:Activity_date>/<str:Activity_type>/', Delete_machinery_activity),
 
     path('update_machineryactivities/<str:Number_plate>/<slug:Activity_date>/', Update_machinery_activities, name='update-machineryactivities'),
 
@@ -82,7 +82,7 @@ urlpatterns = [
 
     path('add_machinerymaintenance/<str:Number_plate>/', Add_machinery_maintenance, name='add-machinerymaintenance'),
 
-    path('delete_machinerymaintenance/<str:Number_plate>/<slug:Date>/', Delete_machinery_maintenance),
+    path('delete_machinerymaintenance/<str:Number_plate>/<slug:Date>/<str:Machinery_part>/', Delete_machinery_maintenance),
 
     path('update_machinerymaintenance/<str:Number_plate>/<slug:Date>/', Update_machinery_maintenance, name='update-machinerymaintenance'),
 
@@ -92,7 +92,7 @@ urlpatterns = [
 
     path('add_milkproductionbymonth/<int:selected_year>/<int:selected_month>/', Add_milk_production_by_month, name='add-milkproductionbymonth'),
 
-    path('delete_milkproductionbymonth/<int:selected_year>/<int:selected_month>/<int:Day>/', Delete_milk_production_by_month),
+    path('Delete_milk_production_by_month/<int:selected_year>/<int:selected_month>/<int:Day>/', Delete_milk_production_by_month),
 
     path('update_milkproductionbymonth/<int:selected_year>/<int:selected_month>/<int:Day>/', Update_milk_production_by_month,name='update-milkproductionbymonth'),
 
@@ -106,5 +106,8 @@ urlpatterns = [
 
     path('update_eggproductionbymonth/<int:selected_year>/<int:selected_month>/<int:Day>/',Update_egg_production_by_month, name='update-eggproduction'),
 
-    path('help/', Help, name='help')
+    path('help/', Help, name='help'),
+
+    path('logOut/', logOut, name='logOut'),
+
 ]

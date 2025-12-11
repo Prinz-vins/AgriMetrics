@@ -3,6 +3,7 @@ from .models import *
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login
+from django.contrib.auth import logout
 
 
 # Create your views here.
@@ -139,12 +140,12 @@ def Update_crop_expenses(request,Cid,Expense_date):
 
     return render(request,'homepage/updatecropexpenses.html',{'crops':crops,'crop_expenses':crop_expenses})
 
-def deleteCrop_expenses(request,Cid,Expense_date):
-        crop_expenses=get_object_or_404(Crop_expenses, crops__Cid=Cid,Expense_date=Expense_date)
 
-        Crop_expenses.delete()
-        return redirect('homepage:show-cropexpenses ',Cid=crop_expenses.crops.Cid)
-    
+def delete_cropexpenses(request, Cid, Expense_date):
+    crop_expenses = get_object_or_404(Crop_expenses, crops__Cid=Cid, Expense_date=Expense_date)
+
+    crop_expenses.delete()  # Changed from Crop_expenses to crop_expenses
+    return redirect('homepage:show-cropexpenses', Cid=Cid)  # Also removed extra space after 'show-cropexpenses'
 
     
 
@@ -168,14 +169,13 @@ def Add_crop_sales(request,Cid):
     else:
         form=Crop_salesForm()
     return render(request,'homepage/addcropsales.html', {'form':form, 'crops':crops})
-    
-
-def Delete_crop_sales(request,Cid,Sale_date):
-        crop_sales=get_object_or_404(Crop_sales,crops__Cid=Cid,Sale_date=Sale_date)
 
 
-        crop_sales.delete()
-        return redirect('homepage:show-cropsales', Cid=crop_sales.crops.Cid)
+def Delete_crop_sales(request, Cid, Sale_date, Invoice_number):
+    crop_sales = get_object_or_404(Crop_sales, crops__Cid=Cid, Sale_date=Sale_date, Invoice_number=Invoice_number)
+
+    crop_sales.delete()
+    return redirect('homepage:show-cropsales', Cid=Cid)
 
 
 def Update_crop_sales(request,Cid,Sale_date):
@@ -213,11 +213,11 @@ def Add_crop_operations(request,Cid):
         form=Crop_operationsForm()
         return render(request, 'homepage/addcropoperations.html',{'form':form,'crops':crops})
 
-def Delete_crop_operations(request,Cid,Operation_date):
-        crop_operations=get_object_or_404(Crop_operations,crops__Cid=Cid,Operation_date=Operation_date)
+def Delete_crop_operations(request,Cid,Operation_date,Operation_name):
+        crop_operations=get_object_or_404(Crop_operations,crops__Cid=Cid,Operation_date=Operation_date,Operation_name=Operation_name)
 
         crop_operations.delete()
-        return redirect('homepage:show-cropoperations',Cid=crop_operations.crops.Cid)
+        return redirect('homepage:show-cropoperations',Cid=Cid)
     
 
 
@@ -307,11 +307,11 @@ def Add_machinery_activities(request,Number_plate):
         form=Machinery_activitesForm()
     return render(request, 'homepage/addmachineryactivities.html',{'machinery':machinery,'form':form})
 
-def Delete_machinery_activity(request,Number_plate,Activity_date):
-        machinery_activities=get_object_or_404(Machinery_activities,machinery__Number_plate=Number_plate,Activity_date=Activity_date)
+def Delete_machinery_activity(request,Number_plate,Activity_date,Activity_type):
+        machinery_activities=get_object_or_404(Machinery_activities,machinery__Number_plate=Number_plate,Activity_date=Activity_date,Activity_type=Activity_type)
 
         machinery_activities.delete()
-        return redirect('homepage:show-machineryactivities',Number_plate=machinery_activities.machinery.Number_plate)
+        return redirect('homepage:show-machineryactivities',Number_plate=Number_plate)
     
 
 
@@ -347,11 +347,11 @@ def Add_machinery_maintenance(request,Number_plate):
         form=Machinery_maintenanceForm()
     return render(request, 'homepage/addmachinerymaintenance.html',{'machinery':machinery,'form':form})
 
-def Delete_machinery_maintenance(request,Number_plate,Date):
-        machinery_maintenance=get_object_or_404(Machinery_maintenance,machinery__Number_plate=Number_plate,Date=Date)
+def Delete_machinery_maintenance(request,Number_plate,Date,Machinery_part):
+        machinery_maintenance=get_object_or_404(Machinery_maintenance,machinery__Number_plate=Number_plate,Date=Date,Machinery_part=Machinery_part)
 
         machinery_maintenance.delete()
-        return redirect('homepage:show-machinerymaintenance',Number_plate=machinery_maintenance.machinery.Number_plate)
+        return redirect('homepage:show-machinerymaintenance',Number_plate=Number_plate)
     
 
 
@@ -613,7 +613,7 @@ def Add_egg_production_by_month(request,selected_year,selected_month):
     return render(request, 'homepage/addeggproduction.html', {'form':form,'selected_year':selected_year,'selected_month':selected_month})
 
 def Delete_egg_production_by_month(request,selected_year,selected_month,Day):
-        egg_production_records=get_object_or_404(Eggs_production,Day=Day)
+        egg_production_records=get_object_or_404(Eggs_production,Day=Day,Year=selected_year,Month=selected_month)
 
         egg_production_records.delete()
         return redirect('homepage:egg-productionrecord', selected_year=selected_year,selected_month=selected_month)
@@ -633,3 +633,7 @@ def Update_egg_production_by_month(request,selected_year,selected_month,Day):
 
 def Help(request):
     return render(request, 'homepage/help.html')
+
+def logOut(request):
+    logout(request)
+    return redirect('/')
