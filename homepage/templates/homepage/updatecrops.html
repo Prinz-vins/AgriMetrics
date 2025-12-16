@@ -353,7 +353,7 @@
                         <i class='bx bx-calendar-check'></i>
                         Harvesting Date
                     </label>
-                    <input type="date" name="Harvesting_date" id="id_Harvesting_date" value="{{ crops.Harvesting_date|date:'Y-m-d' }}">
+                    <input type="date" name="Harvesting_date" id="id_Harvesting_date" value="{{ crops.Harvesting_date|date:'Y-m-d'|default_if_none:'' }}" required>
                 </div>
             </div>
 
@@ -397,7 +397,7 @@
 
         function toggleHarvestingDate() {
             if (!harvestedCheckbox.checked) {
-                harvestingDateInput.value = '';
+
                 harvestingDateInput.disabled = true;
                 harvestingDateInput.style.opacity = '0.5';
             } else {

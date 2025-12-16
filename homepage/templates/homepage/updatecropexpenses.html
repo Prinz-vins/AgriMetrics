@@ -313,7 +313,7 @@
                         <i class='bx bx-calendar'></i>
                         Expense Date
                     </label>
-                    <input type="date" name="Expense_date" id="id_Expense_date" value="{{ crop_expenses.Expense_date }}" required>
+                    <input type="date" name="Expense_date" id="id_Expense_date" value="{{ crop_expenses.Expense_date|date:'Y-m-d' }}" required>
                 </div>
 
                 <div class="form-group">

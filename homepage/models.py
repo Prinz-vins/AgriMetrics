@@ -69,7 +69,7 @@ class Crop_sales(models.Model):
     Payment_method=models.CharField(max_length=20)
     Payment_status=models.CharField(max_length=20, choices=[('pending', 'Pending'), ('received', 'Received')])
     Invoice_number=models.CharField(max_length=20)
-    Additional_notes=models.TextField(blank=True)
+    Additional_notes=models.TextField(blank=True,null=True)
 
 
 #lets over ride the save method in order before saving it calculates the total amount
@@ -89,7 +89,7 @@ class Crop_operations(models.Model):
 
     Operation_date=models.DateField(help_text="m/d/y")
     Operation_name=models.CharField(max_length=20)
-    Additional_notes=models.TextField(blank=True)
+    Additional_notes=models.TextField(blank=True,null=True)
 
     class Meta:
         db_table="Crop_operations"
@@ -104,7 +104,7 @@ class Machinery(models.Model):
     Equipment_name= models.CharField(max_length=20)
     Purchase_price= models.DecimalField(max_digits=10,decimal_places=2)
     Purchase_date = models.DateField()
-    Operation=models.TextField(blank=True)
+    Operation=models.TextField(blank=True,null=True)
 
     class Meta:
         db_table = "Machinery"
@@ -115,7 +115,7 @@ class Machinery_activities(models.Model):
     Activity_date=models.DateField(help_text="m/d/y")
     Activity_type=models.CharField(max_length=20)
     Activity_cost=models.IntegerField(blank=True)
-    Description=models.TextField(blank=True)
+    Description=models.TextField(blank=True,null=True)
 
     class meta:
         db_table="Machinery_activities"

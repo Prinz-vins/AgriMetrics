@@ -1,5 +1,5 @@
 from django import forms 
-from .models import Livestock, Livestock_production,Milk_production,Eggs_production
+from .models import *
 
 class LivestockForm(forms.ModelForm):
     class Meta:

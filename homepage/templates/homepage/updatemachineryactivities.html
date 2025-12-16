@@ -306,7 +306,7 @@
                         <i class='bx bx-calendar'></i>
                         Activity Date
                     </label>
-                    <input type="date" name="Activity_date" id="id_Activity_date" value="{{machinery_activities.Activity_date }}" required>
+                    <input type="date" name="Activity_date" id="id_Activity_date" value="{{machinery_activities.Activity_date|date:'Y-m-d' }}" required>
                 </div>
 
                 <div class="form-group">

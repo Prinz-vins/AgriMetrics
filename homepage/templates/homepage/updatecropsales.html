@@ -348,7 +348,7 @@
                         <i class='bx bx-calendar'></i>
                         Sale Date
                     </label>
-                    <input type="date" name="Sale_date" id="id_Sale_date" value="{{ crop_sales.Sale_date }}" required>
+                    <input type="date" name="Sale_date" id="id_Sale_date" value="{{ crop_sales.Sale_date|date:'Y-m-d' }}" required>
                 </div>
 
                 <div class="form-group">
@@ -437,7 +437,7 @@
                         <i class='bx bx-notepad'></i>
                         Additional Notes
                     </label>
-                    <textarea name="Additional_notes" id="id_Additional_notes" required placeholder="Any additional comments or notes about the sale...">{{ crop_sales.Additional_notes }}</textarea>
+                    <textarea name="Additional_notes" id="id_Additional_notes" required placeholder="Any additional comments or notes about the sale...">{{ crop_sales.Additional_notes|default_if_none:'' }}</textarea>
                 </div>
             </div>
 

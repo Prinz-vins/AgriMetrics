@@ -4,7 +4,13 @@ from .models import *
 class MachineryForm(forms.ModelForm):
     class Meta:
         model=Machinery
-        fields= '__all__'
+        fields= [
+            'Number_plate',
+            'Equipment_name',
+            'Purchase_price',
+            'Purchase_date',
+            'Operation'
+        ]
 
 class Machinery_activitesForm(forms.ModelForm):
     class Meta:

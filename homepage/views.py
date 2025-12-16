@@ -86,16 +86,21 @@ def Add_crops(request):
 
 def Update_crops(request, Cid):
     crops = Crops.objects.get(Cid=Cid)
-    form = CropsForm(request.POST, instance=crops)
 
-    if form.is_valid():
-        form.save()
-        return redirect("homepage:show-crops")
-    
+    if request.method == 'POST':
+        form = CropsForm(request.POST, instance=crops)
+        if form.is_valid():
+            crop_instance = form.save(commit=False)
+            # Explicitly handle the checkbox - unchecked checkboxes don't send data
+            crop_instance.Is_harvested = 'Is_harvested' in request.POST
+            crop_instance.save()
+            return redirect("homepage:show-crops")
+        else:
+            print(form.errors)
     else:
-        print(form.errors)
+        form = CropsForm(instance=crops)
 
-    return render(request, "homepage/updatecrops.html", {"crops": crops})
+    return render(request, "homepage/updatecrops.html", {"crops": crops, "form": form})
 
 def Delete_crops (request,Cid):
         crops=Crops.objects.get(Cid=Cid)
@@ -181,15 +186,20 @@ def Delete_crop_sales(request, Cid, Sale_date, Invoice_number):
 def Update_crop_sales(request,Cid,Sale_date):
     crops= get_object_or_404(Crops,Cid=Cid)
     crop_sales=get_object_or_404(Crop_sales,crops__Cid=Cid,Sale_date=Sale_date)
-    form=Crop_salesForm(request.POST,instance=crop_sales)
+    if request.method == 'POST':
+        form = Crop_salesForm(request.POST, instance=crop_sales)
 
-    if form.is_valid():
-        form.save()
+        if form.is_valid():
+            form.save()
 
-        return redirect('homepage:show-cropsales', Cid=crop_sales.crops.Cid)
-    
+            return redirect('homepage:show-cropsales', Cid=crop_sales.crops.Cid)
+
+        else:
+            print(form.errors)
     else:
-        print(form.errors)
+        form = Crop_salesForm(instance=crop_sales)
+
+
 
     return render(request,'homepage/updatecropsales.html',{'crops':crops,'crop_sales':crop_sales})
 
@@ -218,22 +228,27 @@ def Delete_crop_operations(request,Cid,Operation_date,Operation_name):
 
         crop_operations.delete()
         return redirect('homepage:show-cropoperations',Cid=Cid)
-    
 
 
+def Update_crop_operations(request, Cid, Operation_date):
+    crops = get_object_or_404(Crops, Cid=Cid)
+    crop_operations = get_object_or_404(Crop_operations, crops__Cid=Cid, Operation_date=Operation_date)
 
-def Update_crop_operations(request,Cid,Operation_date):
-    crops= get_object_or_404(Crops,Cid=Cid)
-    crop_operations=get_object_or_404(Crop_operations,crops__Cid=Cid,Operation_date=Operation_date)
-    form  = Crop_operationsForm(request.POST,instance=crop_operations)
+    if request.method == 'POST':
+        form = Crop_operationsForm(request.POST, instance=crop_operations)
+        if form.is_valid():
+            form.save()
+            return redirect('homepage:show-cropoperations', Cid=crop_operations.crops.Cid)
+        else:
+            print(form.errors)
+    else:
+        form = Crop_operationsForm(instance=crop_operations)
 
-    if form.is_valid():
-        form.save()
-
-        return redirect('homepage:show-cropoperations',Cid=crop_operations.crops.Cid)
-    
-    return render(request,'homepage/updatecropoperations.html',{'crops':crops,'crop_operations':crop_operations})
-    
+    return render(request, 'homepage/updatecropoperations.html', {
+        'crops': crops,
+        'crop_operations': crop_operations,
+        'form': form
+    })
     
     
 
@@ -273,17 +288,23 @@ def Delete_machinery(request,Number_plate):
 
 
 def Update_machinery(request,Number_plate):
-    machinery=Machinery.objects.get(Number_plate=Number_plate)
-    form = MachineryForm(request.POST, instance=machinery)
+    machinery=get_object_or_404(Machinery,Number_plate=Number_plate,user=request.user)
+    if request.method=='POST':
+         form = MachineryForm(request.POST, instance=machinery)
+         if form.is_valid():
+           machinery = form.save(commit=False)
+           machinery.user = request.user
+           machinery.save()
+           return redirect("homepage:show-machinery")
 
-    if form.is_valid():
-        form.save()
-        return redirect("homepage:show-machinery")
-    
+         else:
+           print(form.errors)
     else:
-        print(form.errors)
+        form = MachineryForm(instance=machinery)    
+
+   
     
-    return render(request, "homepage/updatemachinery.html", {'machinery':machinery})
+    return render(request, "homepage/updatemachinery.html", {'machinery':machinery,'form':form})
 
 
 def Show_machinery_activities(request,Number_plate):
@@ -319,13 +340,18 @@ def Delete_machinery_activity(request,Number_plate,Activity_date,Activity_type):
 def Update_machinery_activities(request,Number_plate,Activity_date):
     machinery=get_object_or_404(Machinery,Number_plate=Number_plate)
     machinery_activities=get_object_or_404(Machinery_activities,machinery__Number_plate=Number_plate,Activity_date=Activity_date)
-    form=Machinery_activitesForm(request.POST,instance=machinery_activities)
+    if request.method =='POST':
+         form=Machinery_activitesForm(request.POST,instance=machinery_activities)
+         if form.is_valid():
+             form.save()
+             return redirect('homepage:show-machineryactivities',
+                             Number_plate=machinery_activities.machinery.Number_plate)
+    else:
+        form=Machinery_activitesForm(instance=machinery_activities)
 
-    if form.is_valid():
-        form.save()
-        return redirect('homepage:show-machineryactivities',Number_plate=machinery_activities.machinery.Number_plate)
+
     
-    return render(request,'homepage/updatemachineryactivities.html',{'machinery':machinery,'machinery_activities':machinery_activities})
+    return render(request,'homepage/updatemachineryactivities.html',{'machinery':machinery,'machinery_activities':machinery_activities,'form':form})
 
 def Show_machinery_maintenance(request,Number_plate):
     machinery=get_object_or_404(Machinery,Number_plate=Number_plate)
@@ -359,11 +385,15 @@ def Delete_machinery_maintenance(request,Number_plate,Date,Machinery_part):
 def Update_machinery_maintenance(request,Number_plate,Date):
     machinery=get_object_or_404(Machinery,Number_plate=Number_plate)
     machinery_maintenance=get_object_or_404(Machinery_maintenance,machinery__Number_plate=Number_plate,Date=Date)
-    form=Machinery_maintenanceForm(request.POST,instance=machinery_maintenance)
+    if request.method=='POST':
+           form=Machinery_maintenanceForm(request.POST,instance=machinery_maintenance)
+           if form.is_valid():
+               form.save()
+               return redirect('homepage:show-machinerymaintenance',
+                               Number_plate=machinery_maintenance.machinery.Number_plate)
+    else:
+        form=Machinery_maintenanceForm(instance=machinery_maintenance)
 
-    if form.is_valid():
-        form.save()
-        return redirect('homepage:show-machinerymaintenance',Number_plate=machinery_maintenance.machinery.Number_plate)
     
     return render(request,'homepage/updatemachinerymaintenance.html',{'machinery':machinery,'machinery_maintenance':machinery_maintenance})
     
@@ -450,7 +480,10 @@ def deleteLivestock_production(request,Tag_number,Production_date):
 def Update_livestock_production(request,Tag_number,Production_date):
     livestock=get_object_or_404(Livestock,Tag_number=Tag_number)
     livestock_production=get_object_or_404(Livestock_production,livestock__Tag_number=Tag_number,Production_date=Production_date)
-    form=Livestock_productionForm(request.POST,instance=livestock_production)
+    if request.method == 'POST':
+        form = Livestock_productionForm(request.POST, instance=livestock_production)
+    else:
+        form = Livestock_productionForm(instance=livestock_production)
 
     if form.is_valid():
         form.save()
@@ -458,7 +491,7 @@ def Update_livestock_production(request,Tag_number,Production_date):
     else:
         print(form.errors)
 
-    return render(request,'homepage/updatelivestockproduction.html',{'livestock':livestock, 'livestock_production':livestock_production})
+    return render(request,'homepage/updatelivestockproduction.html',{"livestock":livestock, "livestock_production":livestock_production,"form":form})
 
 
 
@@ -572,16 +605,18 @@ def Delete_milk_production_by_month(request,selected_year,selected_month,Day):
 
 def Update_milk_production_by_month(request,selected_year,selected_month,Day):
     milk_production_record=get_object_or_404(Milk_production,Day=Day,Year=selected_year,Month=selected_month)
-    form=Milk_productionForm(request.POST,instance=milk_production_record)
+    if request.method == 'POST':
+         form=Milk_productionForm(request.POST,instance=milk_production_record)
+         if form.is_valid():
+             form.save()
+             return redirect('homepage:milk-productionbymonth', selected_year=selected_year,selected_month=selected_month)
 
-    if form.is_valid():
-        form.save()
-        return redirect('homepage:milk-productionbymonth', selected_year=selected_year,selected_month=selected_month)
-    
+         else:
+             print(form.errors)
     else:
-        print(form.errors)
+        form=Milk_productionForm(instance=milk_production_record)
 
-    return render(request,'homepage/updatemilkproduction.html',{'milk_production_record':milk_production_record, 'selected_year':selected_year,'selected_month':selected_month})
+    return render(request,'homepage/updatemilkproduction.html',{'milk_production_record':milk_production_record, 'selected_year':selected_year,'selected_month':selected_month,'form':form})
 
 #Eggs production
 def Select_year_month_egg(request):
@@ -621,13 +656,17 @@ def Delete_egg_production_by_month(request,selected_year,selected_month,Day):
 
 def Update_egg_production_by_month(request,selected_year,selected_month,Day):
     egg_production_record=get_object_or_404(Eggs_production,Day=Day,Year=selected_year,Month=selected_month)
-    form=Egg_productionForm(request.POST,instance=egg_production_record)
-
-    if form.is_valid():
-        form.save()
-        return redirect('homepage:egg-productionrecord',selected_year=selected_year,selected_month=selected_month)
+    if request.method=='POST':
+           form=Egg_productionForm(request.POST,instance=egg_production_record)
+           if form.is_valid():
+               form.save()
+               return redirect('homepage:egg-productionrecord', selected_year=selected_year,
+                               selected_month=selected_month)
+           else:
+               print(form.errors)
     else:
-        print(form.errors)
+        form=Egg_productionForm(instance=egg_production_record)
+
 
     return render(request,'homepage/updateeggproduction.html',{'egg_production_record':egg_production_record,'selected_year':selected_year,'selected_month':selected_month})
 
